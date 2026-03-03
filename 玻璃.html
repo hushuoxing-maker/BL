@@ -2,7 +2,7 @@
 <html lang="zh">
 <head>
 <meta charset="utf-8">
-<title>古月ai智能体·玻璃商业门头灵感库（左右中英文对照版）（左右双列）</title>
+<title>古月·玻璃商业门头双语提示词生成器（行业自动命名）</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:"Microsoft YaHei",sans-serif;}
 body{
@@ -59,13 +59,8 @@ body{
   gap:15px;
   align-items:flex-start;
 }
-.item-col{
-  flex:1;
-}
-.item-text{
-  font-size:14px;
-  line-height:1.6;
-}
+.item-col{flex:1;}
+.item-text{font-size:14px;line-height:1.6;}
 .copy-btn{
   margin-top:8px;
   padding:6px 12px;
@@ -100,7 +95,7 @@ body{
 <body>
 
 <div class="header">
-<h1>🪟 古月ai智能体·玻璃商业门头灵感库（左右中英文对照版）</h1>
+<h1>🪟 古月·玻璃商业门头双语提示词生成器</h1>
 <p>店铺正立面完全展示 | 8K写实 | 智能体科技感底图 | 白天/夜景模式</p>
 </div>
 
@@ -116,93 +111,71 @@ body{
 <div class="result-wrap" id="resultWrap"></div>
 
 <script>
-// 固定20组提示词文本
-const promptTemplates = [
-  "珠宝首饰店铺门头，玻璃橱窗明亮通透，钢化玻璃+金属字，现代简洁风格",
-  "眼镜配镜店铺门头设计，玻璃展示柜清晰明亮，正面平视视角",
-  "美妆集合店铺门头，通透明亮玻璃橱窗，简约现代风格",
-  "轻奢服饰店铺外立面，玻璃门头+橱窗设计，正面无遮挡",
-  "甜品饮品店铺门头，玻璃橱窗展示，明亮清晰可施工",
-  "数码体验店铺外立面，玻璃门头通透，正面视角8K写实",
-  "珠宝首饰店铺玻璃门头设计，简洁明亮，现代商业风格",
-  "眼镜配镜店铺门头，玻璃橱窗通透明亮，施工级参考",
-  "美妆集合店铺门头，玻璃展示柜清晰通透，现代简约风格",
-  "轻奢服饰店铺门头，玻璃门头明亮，正面视角8K高清",
-  "甜品饮品店铺门头，玻璃橱窗+金属字，现代简洁风格",
-  "数码体验店铺外立面，玻璃门头清晰明亮，正面平视视角",
-  "珠宝首饰店铺门头，玻璃+金属字组合，明亮清晰，施工级参考",
-  "眼镜配镜店铺门头，玻璃通透明亮，现代风格，商业写实",
-  "美妆集合店铺外立面，玻璃橱窗设计，清晰通透，施工级效果",
-  "轻奢服饰店铺门头，玻璃门头明亮，正面视角8K写实",
-  "甜品饮品店铺门头，玻璃橱窗通透明亮，现代设计风格",
-  "数码体验店铺门头，玻璃橱窗清晰通透，正面视角8K高清",
-  "珠宝首饰店铺门头，玻璃+金属字组合，明亮通透，施工参考",
-  "眼镜配镜店铺门头，玻璃橱窗清晰明亮，现代风格，施工级参考"
-];
+// 根据行业生成20个不同店铺名称
+function generateStoreNames(industry){
+  const suffixes = [
+    "旗舰店","体验馆","专卖店","精品店","概念店",
+    "主题店","展厅","快闪店","品牌店","形象店",
+    "专营店","分店","总店","直销店","形象旗舰",
+    "店铺A","店铺B","店铺C","店铺D","精品体验店"
+  ];
+  return suffixes.map(suffix => `${industry}${suffix}`);
+}
 
-const promptEn = [
-  "Jewelry store storefront, glass showcase bright and transparent, tempered glass with metal letters, modern minimalist style",
-  "Optical store storefront design, glass display clear and bright, frontal view",
-  "Beauty collection store storefront, bright transparent glass showcase, simple modern style",
-  "Luxury fashion store exterior, glass facade with showcase design, unobstructed frontal view",
-  "Dessert & beverage store storefront, glass showcase display, bright clear, construction reference",
-  "Digital experience store exterior, transparent glass facade, frontal 8K realistic render",
-  "Jewelry store glass facade design, simple bright, modern commercial style",
-  "Optical store storefront, glass showcase bright and transparent, construction-grade reference",
-  "Beauty collection store storefront, glass display clear and transparent, modern minimalist style",
-  "Luxury fashion store storefront, glass facade bright, frontal 8K high resolution",
-  "Dessert & beverage store storefront, glass showcase with metal letters, modern minimalist style",
-  "Digital experience store exterior, glass facade clear and bright, frontal view",
-  "Jewelry store storefront, glass + metal letters, bright and clear, construction-grade reference",
-  "Optical store storefront, transparent glass, modern style, commercial realistic render",
-  "Beauty collection store exterior, glass showcase design, clear and transparent, construction-grade render",
-  "Luxury fashion store storefront, glass facade bright, frontal 8K realistic render",
-  "Dessert & beverage store storefront, glass showcase transparent bright, modern design style",
-  "Digital experience store storefront, glass showcase clear and transparent, frontal 8K high-res",
-  "Jewelry store storefront, glass + metal letters combination, bright and transparent, construction reference",
-  "Optical store storefront, glass showcase clear and bright, modern style, construction-grade reference"
-];
+// 生成中文和英文提示词
+function generatePrompts(){
+  const industry = document.getElementById("industryInput").value.trim();
+  const mode = document.getElementById("modeSelect").value;
+  if(!industry){alert("请输入店铺行业"); return;}
+  
+  const resultWrap = document.getElementById("resultWrap");
+  resultWrap.innerHTML = "";
+  
+  const storeNames = generateStoreNames(industry);
+  const allPrompts = [];
 
-// 单独复制
+  storeNames.forEach((name,i)=>{
+    const zh = `${mode}，店铺正立面完全展示，${name}玻璃门头，通透明亮，现代简洁风格，可施工参考`;
+    const enMode = mode==="白天自然光"?"Daylight":"Night lighting";
+    const en = `${enMode}, full front view of the store, ${name} glass storefront, bright and transparent, modern minimalist style, construction reference`;
+
+    allPrompts.push({zh,en});
+
+    resultWrap.innerHTML += `
+    <div class="result-item">
+      <div class="item-col">
+        <div class="item-text"><b>第${i+1}组 中文</b><br>${zh}</div>
+        <button class="copy-btn" onclick="copySingle('${zh.replace(/'/g,"\\'")}',this)">复制中文</button>
+      </div>
+      <div class="item-col">
+        <div class="item-text"><b>第${i+1}组 English</b><br>${en}</div>
+        <button class="copy-btn" onclick="copySingle('${en.replace(/'/g,"\\'")}',this)">Copy English</button>
+      </div>
+    </div>`;
+  });
+
+  resultWrap.innerHTML += `<button class="copy-all-btn" onclick="copyAll()">📋 一键复制全部20组</button>`;
+
+  window.allPrompts = allPrompts; // 保留全局方便复制
+}
+
+// 单条复制
 function copySingle(text,btn){
-navigator.clipboard.writeText(text).then(()=>{btn.classList.add("copied"); btn.innerText="已复制";});
+  navigator.clipboard.writeText(text).then(()=>{
+    btn.classList.add('copied');
+    btn.innerText = btn.innerText.includes("中文")?"已复制":"Copied";
+  });
 }
 
 // 一键复制全部
 function copyAll(){
-let allText="";
-promptTemplates.forEach((p,i)=>{allText+=`${i+1}. 中文: ${p}\n英文: ${promptEn[i]}\n\n`;});
-navigator.clipboard.writeText(allText).then(()=>alert("✅ 已成功复制全部20组提示词！"));
-}
-
-// 生成提示词
-function generatePrompts(){
-const industry = document.getElementById("industryInput").value.trim();
-const mode = document.getElementById("modeSelect").value;
-if(!industry){alert("请输入店铺行业"); return;}
-const resultWrap=document.getElementById("resultWrap");
-resultWrap.innerHTML="";
-
-promptTemplates.forEach((p,i)=>{
-let zh = `${mode}，店铺正立面完全展示，${p.replace(/店铺/g,industry+'店铺')}`;
-let en = `${mode==="白天自然光"?"Daylight":"Night lighting"}, full front view of the store, ${promptEn[i].replace(/store/g,industry+" store")}`;
-
-resultWrap.innerHTML+=`
-<div class="result-item">
-  <div class="item-col">
-    <div class="item-text"><b>第${i+1}组 中文</b><br>${zh}</div>
-    <button class="copy-btn" onclick="copySingle('${zh.replace(/'/g,"\\'")}',this)">复制中文</button>
-  </div>
-  <div class="item-col">
-    <div class="item-text"><b>第${i+1}组 English</b><br>${en}</div>
-    <button class="copy-btn" onclick="copySingle('${en.replace(/'/g,"\\'")}',this)">Copy English</button>
-  </div>
-</div>`;
-});
-
-resultWrap.innerHTML+=`<button class="copy-all-btn" onclick="copyAll()">📋 一键复制全部20组</button>`;
+  let allText = "";
+  window.allPrompts.forEach((p,i)=>{
+    allText += `第${i+1}组 中文: ${p.zh}\n英文: ${p.en}\n\n`;
+  });
+  navigator.clipboard.writeText(allText).then(()=>alert("✅ 已成功复制全部20组提示词！"));
 }
 </script>
+
 </body>
 </html>
-
