@@ -2,7 +2,7 @@
 <html lang="zh">
 <head>
 <meta charset="utf-8">
-<title>古月·玻璃商业门头双语提示词生成器（每组不同 + LOGO）</title>
+<title>古月·玻璃商业门头双语提示词生成器（白天/夜景 + 完全不重复 + LOGO + 下载）</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:"Microsoft YaHei",sans-serif;}
 body{
@@ -60,16 +60,14 @@ body{
   border-radius:12px;
   margin-bottom:12px;
   display:flex;
-  justify-content:space-between;
-  gap:15px;
-  align-items:flex-start;
+  flex-direction:column;
+  gap:10px;
   transition:all 0.2s;
 }
 .result-item:hover{
   transform:translateY(-3px);
   box-shadow:0 4px 12px rgba(0,0,0,0.2);
 }
-.item-col{flex:1;}
 .item-text{font-size:14px;line-height:1.6;}
 .copy-btn{
   margin-top:8px;
@@ -89,9 +87,9 @@ body{
   color:#666 !important;
   cursor:default !important;
 }
-.copy-all-btn{
+.copy-all-btn, .download-btn{
   display:block;
-  margin:20px auto 0;
+  margin:15px auto;
   padding:12px 24px;
   background:#0284C7;
   color:#fff;
@@ -101,22 +99,18 @@ body{
   cursor:pointer;
   transition:all 0.2s;
 }
-.copy-all-btn:hover{background:#0369A1;}
+.copy-all-btn:hover, .download-btn:hover{background:#0369A1;}
 </style>
 </head>
 <body>
 
 <div class="header">
 <h1>🪟 古月·玻璃商业门头双语提示词生成器</h1>
-<p>店铺正立面完全展示 | 包含LOGO | 8K写实 | 智能体科技感底图 | 白天/夜景模式</p>
+<p>店铺正立面完全展示 | 包含LOGO | 8K写实 | 智能体科技感底图 | 白天/夜景模式 | 三元组合不重复</p>
 </div>
 
 <div class="input-wrap">
 <input type="text" id="industryInput" class="input-box" placeholder="请输入店铺行业，例如：珠宝首饰、眼镜、美妆集合">
-<select id="modeSelect" class="input-box">
-  <option value="白天自然光">白天自然光</option>
-  <option value="夜景灯光效果">夜景灯光效果</option>
-</select>
 <button class="gen-btn" onclick="generatePrompts()">🚀 生成20组提示词</button>
 </div>
 
@@ -149,113 +143,120 @@ const logoConfigs = [
   {zh: "LOGO玻璃贴膜效果", en: "LOGO Glass Film Effect"}
 ];
 
-// 生成不重复随机数组
-function getUniqueRandomArray(length, count) {
-  const arr = Array.from({length}, (_, i) => i);
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
+// 洗牌函数
+function shuffleArray(array){
+  const arr = array.slice();
+  for(let i=arr.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]]=[arr[j],arr[i]];
   }
-  const result = [];
-  while (result.length < count) {
-    result.push(...arr);
-  }
-  return result.slice(0, count);
+  return arr;
 }
 
 function generatePrompts(){
   const industry = document.getElementById("industryInput").value.trim();
-  const mode = document.getElementById("modeSelect").value;
-  
-  if(!industry){
-    alert("请输入店铺行业"); 
-    return;
-  }
-  
-  const cleanIndustry = industry.replace(/['"]/g, "");
+  if(!industry){alert("请输入店铺行业"); return;}
+  const cleanIndustry = industry.replace(/['"]/g,"");
   const resultWrap = document.getElementById("resultWrap");
-  resultWrap.innerHTML = "";
-  
-  const styleIndexes = getUniqueRandomArray(styleConfigs.length, 20);
-  const lightIndexes = getUniqueRandomArray(lightingConfigs.length, 20);
-  const logoIndexes = getUniqueRandomArray(logoConfigs.length, 20);
+  resultWrap.innerHTML="";
 
+  // 随机生成三元组合不重复
+  const styleIdx = shuffleArray([...Array(styleConfigs.length).keys()]);
+  const lightIdx = shuffleArray([...Array(lightingConfigs.length).keys()]);
+  const logoIdx = shuffleArray([...Array(logoConfigs.length).keys()]);
+
+  const total = 20;
   let allPrompts = [];
 
-  for(let i=0;i<20;i++){
-    const style = styleConfigs[styleIndexes[i]];
-    const lighting = lightingConfigs[lightIndexes[i]];
-    const logo = logoConfigs[logoIndexes[i]];
-    
-    const enMode = mode === "白天自然光" ? "Daylight Natural Light" : "Night Scene Lighting Effect";
-    
-    const zh = `${mode}，店铺正立面完全展示，${cleanIndustry}玻璃门头，${style.zh}，${lighting.zh}，${logo.zh}，通透明亮，现代简洁，8K写实，智能体科技感底图，可施工参考`;
-    const en = `${enMode}, full front view of store facade, ${cleanIndustry} glass storefront, ${style.en}, ${lighting.en}, ${logo.en}, bright and transparent, modern and concise, 8K realistic, intelligent tech background, construction reference`;
-    
-    allPrompts.push({zh, en});
-    
+  for(let i=0;i<total;i++){
+    const style = styleConfigs[styleIdx[i%styleIdx.length]];
+    const lighting = lightingConfigs[lightIdx[i%lightIdx.length]];
+    const logo = logoConfigs[logoIdx[i%logoIdx.length]];
+
+    const dayZh = `白天自然光，店铺正立面完全展示，${cleanIndustry}玻璃门头，${style.zh}，${lighting.zh}，${logo.zh}，通透明亮，现代简洁，8K写实，智能体科技感底图，可施工参考`;
+    const dayEn = `Daylight Natural Light, full front view of store facade, ${cleanIndustry} glass storefront, ${style.en}, ${lighting.en}, ${logo.en}, bright and transparent, modern and concise, 8K realistic, intelligent tech background, construction reference`;
+    const nightZh = `夜景灯光效果，店铺正立面完全展示，${cleanIndustry}玻璃门头，${style.zh}，${lighting.zh}，${logo.zh}，通透明亮，现代简洁，8K写实，智能体科技感底图，可施工参考`;
+    const nightEn = `Night Scene Lighting Effect, full front view of store facade, ${cleanIndustry} glass storefront, ${style.en}, ${lighting.en}, ${logo.en}, bright and transparent, modern and concise, 8K realistic, intelligent tech background, construction reference`;
+
+    allPrompts.push({dayZh, dayEn, nightZh, nightEn});
+
     const item = document.createElement('div');
-    item.className = 'result-item';
-    item.innerHTML = `
-    <div class="item-col">
-      <div class="item-text"><b>第${i+1}组 中文</b><br>${zh}</div>
-      <button class="copy-btn" data-text="${zh}">复制中文</button>
-    </div>
-    <div class="item-col">
-      <div class="item-text"><b>第${i+1}组 English</b><br>${en}</div>
-      <button class="copy-btn" data-text="${en}">Copy English</button>
-    </div>`;
+    item.className='result-item';
+    item.innerHTML=`
+      <div class="item-text"><b>第${i+1}组 白天 中文</b><br>${dayZh}</div>
+      <button class="copy-btn" data-text="${dayZh}">复制中文</button>
+      <div class="item-text"><b>第${i+1}组 白天 English</b><br>${dayEn}</div>
+      <button class="copy-btn" data-text="${dayEn}">Copy English</button>
+      <div class="item-text"><b>第${i+1}组 夜景 中文</b><br>${nightZh}</div>
+      <button class="copy-btn" data-text="${nightZh}">复制中文</button>
+      <div class="item-text"><b>第${i+1}组 夜景 English</b><br>${nightEn}</div>
+      <button class="copy-btn" data-text="${nightEn}">Copy English</button>
+    `;
     resultWrap.appendChild(item);
   }
 
+  // 复制和下载按钮
   const copyAllBtn = document.createElement('button');
-  copyAllBtn.className = 'copy-all-btn';
-  copyAllBtn.innerText = '📋 一键复制全部20组';
-  copyAllBtn.onclick = copyAll;
+  copyAllBtn.className='copy-all-btn';
+  copyAllBtn.innerText='📋 一键复制全部提示词';
+  copyAllBtn.onclick=()=>copyAll(allPrompts);
   resultWrap.appendChild(copyAllBtn);
-  
-  window.allPrompts = allPrompts;
 
-  // 绑定复制事件
-  document.querySelectorAll('.copy-btn').forEach(btn => {
-    btn.onclick = function () {
-      const text = this.getAttribute('data-text');
+  const downloadBtn = document.createElement('button');
+  downloadBtn.className='download-btn';
+  downloadBtn.innerText='💾 下载全部提示词TXT';
+  downloadBtn.onclick=()=>downloadTXT(allPrompts, cleanIndustry);
+  resultWrap.appendChild(downloadBtn);
+
+  // 绑定单条复制事件
+  document.querySelectorAll('.copy-btn').forEach(btn=>{
+    btn.onclick=function(){
+      const text=this.getAttribute('data-text');
       copySingle(text, this);
     };
   });
+  window.allPrompts=allPrompts;
 }
 
 // 单条复制
-function copySingle(text, btn) {
-  navigator.clipboard.writeText(text).then(() => {
-    const oldText = btn.innerText;
+function copySingle(text, btn){
+  navigator.clipboard.writeText(text).then(()=>{
+    const old=btn.innerText;
     btn.classList.add('copied');
-    btn.innerText = btn.innerText.includes("中文") ? "已复制" : "Copied";
-    setTimeout(() => {
+    btn.innerText=old.includes("中文")?"已复制":"Copied";
+    setTimeout(()=>{
       btn.classList.remove('copied');
-      btn.innerText = oldText;
-    }, 2000);
-  }).catch(err => {
-    alert("复制失败：" + err);
-  });
+      btn.innerText=old;
+    },2000);
+  }).catch(err=>{alert("复制失败："+err)});
 }
 
 // 一键复制全部
-function copyAll() {
-  if (!window.allPrompts || window.allPrompts.length === 0) {
-    alert("请先生成提示词");
-    return;
-  }
-  let allText = "";
-  window.allPrompts.forEach((p, i) => {
-    allText += `第${i+1}组\n中文：${p.zh}\n英文：${p.en}\n\n`;
+function copyAll(allPrompts){
+  if(!allPrompts || allPrompts.length===0){alert("请先生成提示词"); return;}
+  let allText="";
+  allPrompts.forEach((p,i)=>{
+    allText+=`第${i+1}组\n白天 中文：${p.dayZh}\n白天 English：${p.dayEn}\n夜景 中文：${p.nightZh}\n夜景 English：${p.nightEn}\n\n`;
   });
-  navigator.clipboard.writeText(allText).then(() => {
-    alert("✅ 已复制全部20组提示词！");
-  }).catch(err => {
-    alert("复制失败：" + err);
+  navigator.clipboard.writeText(allText).then(()=>alert("✅ 已复制全部提示词！"))
+  .catch(err=>alert("复制失败："+err));
+}
+
+// 下载TXT
+function downloadTXT(allPrompts, industry){
+  if(!allPrompts || allPrompts.length===0){alert("请先生成提示词"); return;}
+  let content="";
+  allPrompts.forEach((p,i)=>{
+    content+=`第${i+1}组\n白天 中文：${p.dayZh}\n白天 English：${p.dayEn}\n夜景 中文：${p.nightZh}\n夜景 English：${p.nightEn}\n\n`;
   });
+  const blob=new Blob([content],{type:"text/plain;charset=utf-8"});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download=`${industry}_门头提示词.txt`;
+  a.click();
+  URL.revokeObjectURL(a.href);
 }
 </script>
+
 </body>
 </html>
