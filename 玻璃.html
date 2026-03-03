@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
-<title>古月ai智能体·玻璃商业门头灵感库（智能体3D升级版）</title>
+<title>古月ai智能体·玻璃商业门头灵感库（双语3D升级版）</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:"Microsoft YaHei",sans-serif;}
 body{
@@ -47,9 +47,9 @@ body::after{
 .result-item{
   background:#fff;padding:20px;border-radius:12px;margin-bottom:12px;
   border-left:4px solid #0284C7;box-shadow:0 2px 10px rgba(0,0,0,0.04);
-  display:flex;justify-content:space-between;align-items:flex-start;gap:15px;color:#1F2937;
+  display:flex;flex-direction:column;gap:8px;color:#1F2937;
 }
-.item-text{flex:1;font-size:14px;line-height:1.6;color:#374151;}
+.item-text{font-size:14px;line-height:1.6;color:#374151;}
 .copy-btn{padding:8px 12px;background:#0284C7;color:#fff;border:none;border-radius:6px;font-size:13px;cursor:pointer;white-space:nowrap;transition:0.2s;}
 .copy-btn:hover{background:#0369A1;}
 .copy-btn.copied{background:#CCCCCC !important;color:#666666 !important;cursor:default !important;}
@@ -58,7 +58,7 @@ body::after{
 </style>
 
 <div class="header">
-  <h1>🪟 >古月ai智能体·玻璃商业门头灵感库（智能体3D升级版）</h1>
+  <h1>🪟 古月ai智能体·玻璃商业门头灵感库（双语3D升级版）</h1>
   <p>白天/夜景3D正立面｜平视无遮挡｜8K写实｜智能体高级感</p>
 </div>
 
@@ -88,7 +88,12 @@ function createPrompt(industry,index,scene){
     "主营产品+清晰展示标语","特色产品+通透吸睛标语","招牌产品+简约干净标语",
     "核心产品+清晰通透标语","爆款产品+简约明了标语"
   ];
-  return `${scene}，店铺正立面完全展示，完整展示，正面平视视角，无透视畸变，无遮挡，玻璃门头，通透明亮、展示性强、现代简洁，${industry}店铺门头，钢化玻璃、磨砂玻璃、玻璃橱窗、金属包边、玻璃灯箱，品牌店名+${variants[index]}，清晰字体，${scene==="白天自然光"?"日间清晰玻璃背光、橱窗补光":"夜景柔和灯光、背光橱窗补光"}，8K高清，商业写实效果图，3D立体感渲染，细节丰富，色彩自然，可施工参考`;
+  
+  const cnPrompt = `${scene}，店铺正立面完全展示，完整展示，正面平视视角，无透视畸变，无遮挡，玻璃门头，通透明亮、展示性强、现代简洁，${industry}店铺门头，钢化玻璃、磨砂玻璃、玻璃橱窗、金属包边、玻璃灯箱，品牌店名+${variants[index]}，清晰字体，${scene==="白天自然光"?"日间清晰玻璃背光、橱窗补光":"夜景柔和灯光、背光橱窗补光"}，8K高清，商业写实效果图，3D立体感渲染，细节丰富，色彩自然，可施工参考`;
+
+  const enPrompt = `${scene==="白天自然光"?"Daytime natural light":"Night lighting scene"}, full front view of the shop, unobstructed, correct perspective, glass facade, transparent and bright, highly displayable, modern minimalist style, ${industry} store facade, tempered glass, frosted glass, display windows, metal trims, glass lightboxes, brand name + ${variants[index]}, clear fonts, ${scene==="白天自然光"?"daytime glass backlight and display window fill light":"soft night lights, backlit window fill light"}, 8K ultra HD, commercial realistic rendering, 3D sense, rich details, natural colors, construction reference available`;
+
+  return {cn: cnPrompt, en: enPrompt};
 }
 
 function copySingle(text,btn){
@@ -96,8 +101,8 @@ function copySingle(text,btn){
 }
 
 function copyAll(){
-  const allText=allPrompts.join("\n\n");
-  navigator.clipboard.writeText(allText).then(()=>{alert("✅ 已成功复制全部20组提示词！");});
+  const allText = allPrompts.map((p,i)=>`${i+1}. 中文: ${p.cn}\n英文: ${p.en}`).join("\n\n");
+  navigator.clipboard.writeText(allText).then(()=>{alert("✅ 已成功复制全部20组提示词（中英文）！");});
 }
 
 function generatePrompts(){
@@ -114,11 +119,13 @@ function generatePrompts(){
       allPrompts.push(prompt);
       html+=`
         <div class="result-item">
-          <div class="item-text">${i+1}. ${prompt}</div>
-          <button class="copy-btn" onclick="copySingle('${prompt.replace(/'/g,"&apos;")}',this)">复制</button>
+          <div class="item-text"><b>中文:</b> ${prompt.cn}</div>
+          <button class="copy-btn" onclick="copySingle('${prompt.cn.replace(/'/g,"&apos;")}',this)">复制中文</button>
+          <div class="item-text"><b>English:</b> ${prompt.en}</div>
+          <button class="copy-btn" onclick="copySingle('${prompt.en.replace(/'/g,"&apos;")}',this)">Copy English</button>
         </div>`;
     }
-    html+=`<button class="copy-all-btn" onclick="copyAll()">📋 一键复制全部20组</button>`;
+    html+=`<button class="copy-all-btn" onclick="copyAll()">📋 一键复制全部20组中英文</button>`;
     resultWrap.innerHTML=html;
     genBtn.disabled=false;genBtn.textContent="🚀 生成20组提示词";
   },500);
