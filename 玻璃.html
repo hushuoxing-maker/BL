@@ -2,7 +2,7 @@
 <html lang="zh">
 <head>
 <meta charset="utf-8">
-<title>古月ai智能体·玻璃商业门头灵感库（左右中英文对照版)</title>
+<title>古月·玻璃商业门头双语提示词生成器（每组不同 + LOGO）</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:"Microsoft YaHei",sans-serif;}
 body{
@@ -43,6 +43,11 @@ body{
   border:none;
   border-radius:10px;
   cursor:pointer;
+  transition:all 0.3s;
+}
+.gen-btn:hover{
+  opacity:0.9;
+  transform:translateY(-2px);
 }
 .result-wrap{
   max-width:800px;
@@ -58,6 +63,11 @@ body{
   justify-content:space-between;
   gap:15px;
   align-items:flex-start;
+  transition:all 0.2s;
+}
+.result-item:hover{
+  transform:translateY(-3px);
+  box-shadow:0 4px 12px rgba(0,0,0,0.2);
 }
 .item-col{flex:1;}
 .item-text{font-size:14px;line-height:1.6;}
@@ -71,6 +81,7 @@ body{
   font-size:13px;
   cursor:pointer;
   white-space:nowrap;
+  transition:all 0.2s;
 }
 .copy-btn:hover{background:#0369A1;}
 .copy-btn.copied{
@@ -88,6 +99,7 @@ body{
   border-radius:8px;
   font-size:15px;
   cursor:pointer;
+  transition:all 0.2s;
 }
 .copy-all-btn:hover{background:#0369A1;}
 </style>
@@ -95,7 +107,7 @@ body{
 <body>
 
 <div class="header">
-<h1>🪟 古月ai智能体·玻璃商业门头灵感库（左右中英文对照版)</h1>
+<h1>🪟 古月·玻璃商业门头双语提示词生成器</h1>
 <p>店铺正立面完全展示 | 包含LOGO | 8K写实 | 智能体科技感底图 | 白天/夜景模式</p>
 </div>
 
@@ -111,78 +123,139 @@ body{
 <div class="result-wrap" id="resultWrap"></div>
 
 <script>
-// 可随机选择的风格、灯光、LOGO表现方式
-const styles = ["现代极简","高端质感","商业旗舰风格","建筑感强化","设计师定制风格","未来科技感","透明通透感","艺术展示风格"];
-const lightings = ["自然光照射","隐藏灯带光效","立体背光LOGO","柔光洗墙灯","霓虹灯条点缀"];
-const logoStyles = ["LOGO浮雕金属质感","LOGO发光效果","LOGO背光设计","LOGO镂空立体感","LOGO玻璃贴膜效果"];
+// 中英双语配置
+const styleConfigs = [
+  {zh: "现代极简", en: "Modern Minimalism"},
+  {zh: "高端质感", en: "High-end Texture"},
+  {zh: "商业旗舰风格", en: "Commercial Flagship Style"},
+  {zh: "建筑感强化", en: "Enhanced Architectural Sense"},
+  {zh: "设计师定制风格", en: "Designer Custom Style"},
+  {zh: "未来科技感", en: "Futuristic Tech Sense"},
+  {zh: "透明通透感", en: "Transparent Sense"},
+  {zh: "艺术展示风格", en: "Art Display Style"}
+];
+const lightingConfigs = [
+  {zh: "自然光照射", en: "Natural Light Irradiation"},
+  {zh: "隐藏灯带光效", en: "Hidden Light Strip Effect"},
+  {zh: "立体背光LOGO", en: "Three-dimensional Backlit LOGO"},
+  {zh: "柔光洗墙灯", en: "Soft Wall Washer Light"},
+  {zh: "霓虹灯条点缀", en: "Neon Light Strip Embellishment"}
+];
+const logoConfigs = [
+  {zh: "LOGO浮雕金属质感", en: "LOGO Embossed Metal Texture"},
+  {zh: "LOGO发光效果", en: "LOGO Luminous Effect"},
+  {zh: "LOGO背光设计", en: "LOGO Backlight Design"},
+  {zh: "LOGO镂空立体感", en: "LOGO Hollow Three-dimensional Sense"},
+  {zh: "LOGO玻璃贴膜效果", en: "LOGO Glass Film Effect"}
+];
 
-// 生成不重复随机数字
-function uniqueRandoms(count, max){
-  const set = new Set();
-  while(set.size < count){
-    set.add(Math.floor(Math.random()*max));
+// 生成不重复随机数组
+function getUniqueRandomArray(length, count) {
+  const arr = Array.from({length}, (_, i) => i);
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
   }
-  return Array.from(set);
+  const result = [];
+  while (result.length < count) {
+    result.push(...arr);
+  }
+  return result.slice(0, count);
 }
 
 function generatePrompts(){
   const industry = document.getElementById("industryInput").value.trim();
   const mode = document.getElementById("modeSelect").value;
-  if(!industry){alert("请输入店铺行业"); return;}
   
+  if(!industry){
+    alert("请输入店铺行业"); 
+    return;
+  }
+  
+  const cleanIndustry = industry.replace(/['"]/g, "");
   const resultWrap = document.getElementById("resultWrap");
   resultWrap.innerHTML = "";
   
+  const styleIndexes = getUniqueRandomArray(styleConfigs.length, 20);
+  const lightIndexes = getUniqueRandomArray(lightingConfigs.length, 20);
+  const logoIndexes = getUniqueRandomArray(logoConfigs.length, 20);
+
   let allPrompts = [];
-  
-  const styleIndex = uniqueRandoms(20, styles.length);
-  const lightIndex = uniqueRandoms(20, lightings.length);
-  const logoIndex = uniqueRandoms(20, logoStyles.length);
 
   for(let i=0;i<20;i++){
-    const storeName = `${industry}店铺${i+1}`;
-    const zh = `${mode}，店铺正立面完全展示，${storeName}玻璃门头，${styles[styleIndex[i]]}，${lightings[lightIndex[i]]}，${logoStyles[logoIndex[i]]}，通透明亮，现代简洁，可施工参考`;
-    const enMode = mode==="白天自然光"?"Daylight":"Night lighting";
-    const en = `${enMode}, full front view of ${storeName} glass storefront, ${styles[styleIndex[i]]}, ${lightings[lightIndex[i]]}, ${logoStyles[logoIndex[i]]}, bright and transparent, modern minimalist style, construction reference`;
+    const style = styleConfigs[styleIndexes[i]];
+    const lighting = lightingConfigs[lightIndexes[i]];
+    const logo = logoConfigs[logoIndexes[i]];
     
-    allPrompts.push({zh,en});
-
-    resultWrap.innerHTML += `
-    <div class="result-item">
-      <div class="item-col">
-        <div class="item-text"><b>第${i+1}组 中文</b><br>${zh}</div>
-        <button class="copy-btn" onclick="copySingle('${zh.replace(/'/g,"\\'")}',this)">复制中文</button>
-      </div>
-      <div class="item-col">
-        <div class="item-text"><b>第${i+1}组 English</b><br>${en}</div>
-        <button class="copy-btn" onclick="copySingle('${en.replace(/'/g,"\\'")}',this)">Copy English</button>
-      </div>
+    const enMode = mode === "白天自然光" ? "Daylight Natural Light" : "Night Scene Lighting Effect";
+    
+    const zh = `${mode}，店铺正立面完全展示，${cleanIndustry}玻璃门头，${style.zh}，${lighting.zh}，${logo.zh}，通透明亮，现代简洁，8K写实，智能体科技感底图，可施工参考`;
+    const en = `${enMode}, full front view of store facade, ${cleanIndustry} glass storefront, ${style.en}, ${lighting.en}, ${logo.en}, bright and transparent, modern and concise, 8K realistic, intelligent tech background, construction reference`;
+    
+    allPrompts.push({zh, en});
+    
+    const item = document.createElement('div');
+    item.className = 'result-item';
+    item.innerHTML = `
+    <div class="item-col">
+      <div class="item-text"><b>第${i+1}组 中文</b><br>${zh}</div>
+      <button class="copy-btn" data-text="${zh}">复制中文</button>
+    </div>
+    <div class="item-col">
+      <div class="item-text"><b>第${i+1}组 English</b><br>${en}</div>
+      <button class="copy-btn" data-text="${en}">Copy English</button>
     </div>`;
+    resultWrap.appendChild(item);
   }
 
-  resultWrap.innerHTML += `<button class="copy-all-btn" onclick="copyAll()">📋 一键复制全部20组</button>`;
+  const copyAllBtn = document.createElement('button');
+  copyAllBtn.className = 'copy-all-btn';
+  copyAllBtn.innerText = '📋 一键复制全部20组';
+  copyAllBtn.onclick = copyAll;
+  resultWrap.appendChild(copyAllBtn);
   
   window.allPrompts = allPrompts;
+
+  // 绑定复制事件
+  document.querySelectorAll('.copy-btn').forEach(btn => {
+    btn.onclick = function () {
+      const text = this.getAttribute('data-text');
+      copySingle(text, this);
+    };
+  });
 }
 
 // 单条复制
-function copySingle(text,btn){
-  navigator.clipboard.writeText(text).then(()=>{
+function copySingle(text, btn) {
+  navigator.clipboard.writeText(text).then(() => {
+    const oldText = btn.innerText;
     btn.classList.add('copied');
-    btn.innerText = btn.innerText.includes("中文")?"已复制":"Copied";
+    btn.innerText = btn.innerText.includes("中文") ? "已复制" : "Copied";
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      btn.innerText = oldText;
+    }, 2000);
+  }).catch(err => {
+    alert("复制失败：" + err);
   });
 }
 
 // 一键复制全部
-function copyAll(){
+function copyAll() {
+  if (!window.allPrompts || window.allPrompts.length === 0) {
+    alert("请先生成提示词");
+    return;
+  }
   let allText = "";
-  window.allPrompts.forEach((p,i)=>{
-    allText += `第${i+1}组 中文: ${p.zh}\n英文: ${p.en}\n\n`;
+  window.allPrompts.forEach((p, i) => {
+    allText += `第${i+1}组\n中文：${p.zh}\n英文：${p.en}\n\n`;
   });
-  navigator.clipboard.writeText(allText).then(()=>alert("✅ 已成功复制全部20组提示词！"));
+  navigator.clipboard.writeText(allText).then(() => {
+    alert("✅ 已复制全部20组提示词！");
+  }).catch(err => {
+    alert("复制失败：" + err);
+  });
 }
 </script>
-
 </body>
 </html>
-
