@@ -2,7 +2,7 @@
 <html lang="zh">
 <head>
 <meta charset="utf-8">
-<title>古月ai智能体·玻璃商业门头灵感库（左右中英文对照版）</title>
+<title>古月·玻璃商业门头双语提示词生成器（白天/夜景模式）</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:"Microsoft YaHei",sans-serif;}
 body{
@@ -25,7 +25,7 @@ body{
   padding:30px;
   border-radius:16px;
 }
-.input-box{
+.input-box, select{
   width:100%;
   padding:15px 20px;
   font-size:16px;
@@ -97,39 +97,68 @@ body{
 <body>
 
 <div class="header">
-<h1>🪟 古月ai智能体·玻璃商业门头灵感库（左右中英文对照版）</h1>
-<p>店铺正立面完全展示 | 8K写实 | 智能体科技感底图</p>
+<h1>🪟 古月·玻璃商业门头双语提示词生成器</h1>
+<p>店铺正立面完全展示 | 8K写实 | 智能体科技感底图 | 白天/夜景模式</p>
 </div>
 
 <div class="input-wrap">
 <input type="text" id="industryInput" class="input-box" placeholder="请输入店铺行业，例如：珠宝首饰、眼镜、美妆集合">
+<select id="modeSelect" class="input-box">
+  <option value="白天自然光">白天自然光</option>
+  <option value="夜景灯光效果">夜景灯光效果</option>
+</select>
 <button class="gen-btn" onclick="generatePrompts()">🚀 生成20组提示词</button>
 </div>
 
 <div class="result-wrap" id="resultWrap"></div>
 
 <script>
-const prompts = [
-  {zh:"白天自然光，店铺正立面完全展示，无遮挡，玻璃门头通透明亮，珠宝首饰店铺门头，钢化玻璃+金属包边，8K高清商业写实效果图",en:"Daylight, full front view of the store, unobstructed, glass facade bright and transparent, jewelry store storefront, tempered glass with metal trim, 8K high-resolution commercial realistic render"},
-  {zh:"夜景灯光环境，店铺正立面完全展示，无裁切，玻璃橱窗明亮，眼镜配镜店铺门头，现代简洁风格，8K高清写实效果图",en:"Night lighting environment, full front view of the store, no cropping, glass showcase bright, optical store storefront, modern minimalist style, 8K high-resolution realistic render"},
-  {zh:"白天自然光，店铺正立面完全展示，无遮挡，玻璃门头简约设计，美妆集合店铺门头，通透明亮，商业施工参考级效果",en:"Daylight, full front view of the store, unobstructed, simple glass facade design, beauty collection store storefront, bright and transparent, commercial-grade render for construction reference"},
-  {zh:"夜景灯光效果，店铺正立面完全展示，玻璃门头清晰明亮，轻奢服饰店铺外立面，正面视角8K写实效果",en:"Night lighting effect, full front view of the store, glass facade clear and bright, luxury fashion store exterior, frontal 8K realistic render"},
-  {zh:"白天自然光，店铺正立面完全展示，玻璃橱窗设计，甜品饮品店铺门头，明亮通透，现代简约风格，商业施工参考级",en:"Daylight, full front view of the store, glass showcase design, dessert & beverage store storefront, bright and transparent, modern minimalist style, commercial-grade render for construction"},
-  {zh:"夜景灯光，店铺正立面完全展示，玻璃门头通透，数码体验店铺外立面，正面平视视角，8K商业写实效果",en:"Night lighting, full front view of the store, transparent glass facade, digital experience store exterior, frontal view, 8K commercial realistic render"},
-  {zh:"白天光照，店铺正立面完全展示，无遮挡，珠宝首饰店铺门头设计，玻璃+金属字结合，8K高清效果图",en:"Daylight illumination, full front view of the store, unobstructed, jewelry store storefront design, glass with metal letters combination, 8K high-resolution render"},
-  {zh:"夜景环境，店铺正立面完全展示，眼镜配镜店铺玻璃门头，现代简约风格，通透明亮，商业施工参考级",en:"Night environment, full front view of the store, optical store glass facade, modern minimalist style, bright and transparent, commercial-grade render"},
-  {zh:"白天自然光，店铺正立面完全展示，美妆集合店铺门头，玻璃橱窗设计，清晰明亮，8K高清写实效果图",en:"Daylight, full front view of the store, beauty collection store storefront, glass showcase design, clear and bright, 8K high-resolution realistic render"},
-  {zh:"夜景灯光，店铺正立面完全展示，轻奢服饰店铺外立面，玻璃门头通透明亮，正面视角8K写实效果",en:"Night lighting, full front view of the store, luxury fashion store exterior, glass facade bright and transparent, frontal 8K realistic render"},
-  {zh:"白天自然光，店铺正立面完全展示，玻璃橱窗+金属字，甜品饮品店铺门头，明亮清晰，现代简约风格",en:"Daylight, full front view of the store, glass showcase with metal letters, dessert & beverage store storefront, bright and clear, modern minimalist style"},
-  {zh:"夜景灯光环境，店铺正立面完全展示，数码体验店铺外立面，玻璃门头清晰，8K商业写实效果",en:"Night lighting environment, full front view of the store, digital experience store exterior, glass facade clear, 8K commercial realistic render"},
-  {zh:"白天自然光，店铺正立面完全展示，珠宝首饰店铺玻璃门头，简洁明亮，商业施工级参考",en:"Daylight, full front view of the store, jewelry store glass facade, simple and bright, commercial-grade render for reference"},
-  {zh:"夜景灯光，店铺正立面完全展示，眼镜配镜店铺门头设计，玻璃通透，现代风格，8K高清写实效果",en:"Night lighting, full front view of the store, optical store storefront design, transparent glass, modern style, 8K high-resolution realistic render"},
-  {zh:"白天光照，店铺正立面完全展示，美妆集合店铺外立面，玻璃橱窗设计，清晰通透，施工级效果图",en:"Daylight, full front view of the store, beauty collection store exterior, glass showcase design, clear and transparent, construction-grade render"},
-  {zh:"夜景灯光效果，店铺正立面完全展示，轻奢服饰店铺门头，玻璃通透明亮，正面视角8K写实效果",en:"Night lighting effect, full front view of the store, luxury fashion store storefront, glass bright and transparent, frontal 8K realistic render"},
-  {zh:"白天自然光，店铺正立面完全展示，甜品饮品店铺玻璃门头，明亮简洁，现代设计风格，8K商业写实",en:"Daylight, full front view of the store, dessert & beverage store glass facade, bright and simple, modern design style, 8K commercial realistic render"},
-  {zh:"夜景灯光，店铺正立面完全展示，数码体验店铺外立面，玻璃橱窗清晰通透，正面视角8K写实效果",en:"Night lighting, full front view of the store, digital experience store exterior, glass showcase clear and transparent, frontal 8K realistic render"},
-  {zh:"白天光照，店铺正立面完全展示，珠宝首饰店铺门头，玻璃+金属字，明亮通透，施工级参考",en:"Daylight illumination, full front view of the store, jewelry store storefront, glass with metal letters, bright and transparent, construction-grade reference"},
-  {zh:"夜景灯光环境，店铺正立面完全展示，眼镜配镜店铺玻璃门头，清晰明亮，现代风格，商业施工参考",en:"Night lighting environment, full front view of the store, optical store glass facade, clear and bright, modern style, commercial-grade reference"}
+// 固定20组提示词文本
+const promptTemplates = [
+  "珠宝首饰店铺门头，玻璃橱窗明亮通透，钢化玻璃+金属字，现代简洁风格",
+  "眼镜配镜店铺门头设计，玻璃展示柜清晰明亮，正面平视视角",
+  "美妆集合店铺门头，通透明亮玻璃橱窗，简约现代风格",
+  "轻奢服饰店铺外立面，玻璃门头+橱窗设计，正面无遮挡",
+  "甜品饮品店铺门头，玻璃橱窗展示，明亮清晰可施工",
+  "数码体验店铺外立面，玻璃门头通透，正面视角8K写实",
+  "珠宝首饰店铺玻璃门头设计，简洁明亮，现代商业风格",
+  "眼镜配镜店铺门头，玻璃橱窗通透明亮，施工级参考",
+  "美妆集合店铺门头，玻璃展示柜清晰通透，现代简约风格",
+  "轻奢服饰店铺门头，玻璃门头明亮，正面视角8K高清",
+  "甜品饮品店铺门头，玻璃橱窗+金属字，现代简洁风格",
+  "数码体验店铺外立面，玻璃门头清晰明亮，正面平视视角",
+  "珠宝首饰店铺门头，玻璃+金属字组合，明亮清晰，施工级参考",
+  "眼镜配镜店铺门头，玻璃通透明亮，现代风格，商业写实",
+  "美妆集合店铺外立面，玻璃橱窗设计，清晰通透，施工级效果",
+  "轻奢服饰店铺门头，玻璃门头明亮，正面视角8K写实",
+  "甜品饮品店铺门头，玻璃橱窗通透明亮，现代设计风格",
+  "数码体验店铺门头，玻璃橱窗清晰通透，正面视角8K高清",
+  "珠宝首饰店铺门头，玻璃+金属字组合，明亮通透，施工参考",
+  "眼镜配镜店铺门头，玻璃橱窗清晰明亮，现代风格，施工级参考"
+];
+
+// 生成对应英文
+const promptEn = [
+  "Jewelry store storefront, glass showcase bright and transparent, tempered glass with metal letters, modern minimalist style",
+  "Optical store storefront design, glass display clear and bright, frontal view",
+  "Beauty collection store storefront, bright transparent glass showcase, simple modern style",
+  "Luxury fashion store exterior, glass facade with showcase design, unobstructed frontal view",
+  "Dessert & beverage store storefront, glass showcase display, bright clear, construction reference",
+  "Digital experience store exterior, transparent glass facade, frontal 8K realistic render",
+  "Jewelry store glass facade design, simple bright, modern commercial style",
+  "Optical store storefront, glass showcase bright and transparent, construction-grade reference",
+  "Beauty collection store storefront, glass display clear and transparent, modern minimalist style",
+  "Luxury fashion store storefront, glass facade bright, frontal 8K high resolution",
+  "Dessert & beverage store storefront, glass showcase with metal letters, modern minimalist style",
+  "Digital experience store exterior, glass facade clear and bright, frontal view",
+  "Jewelry store storefront, glass + metal letters, bright and clear, construction-grade reference",
+  "Optical store storefront, transparent glass, modern style, commercial realistic render",
+  "Beauty collection store exterior, glass showcase design, clear and transparent, construction-grade render",
+  "Luxury fashion store storefront, glass facade bright, frontal 8K realistic render",
+  "Dessert & beverage store storefront, glass showcase transparent bright, modern design style",
+  "Digital experience store storefront, glass showcase clear and transparent, frontal 8K high-res",
+  "Jewelry store storefront, glass + metal letters combination, bright and transparent, construction reference",
+  "Optical store storefront, glass showcase clear and bright, modern style, construction-grade reference"
 ];
 
 function copySingle(text,btn){
@@ -138,28 +167,31 @@ navigator.clipboard.writeText(text).then(()=>{btn.classList.add("copied");btn.in
 
 function copyAll(){
 let allText="";
-prompts.forEach((p,i)=>{allText+=`${i+1}. 中文: ${p.zh}\n英文: ${p.en}\n\n`;});
+promptTemplates.forEach((p,i)=>{allText+=`${i+1}. 中文: ${p}\n英文: ${promptEn[i]}\n\n`;});
 navigator.clipboard.writeText(allText).then(()=>alert("✅ 已成功复制全部20组提示词！"));
 }
 
 function generatePrompts(){
+const industry = document.getElementById("industryInput").value.trim();
+const mode = document.getElementById("modeSelect").value;
+if(!industry){alert("请输入店铺行业"); return;}
 const resultWrap=document.getElementById("resultWrap");
 resultWrap.innerHTML="";
-prompts.forEach((p,i)=>{
+promptTemplates.forEach((p,i)=>{
+let zh = `${mode}，店铺正立面完全展示，${p.replace(/店铺/g, industry+'店铺')}`;
+let en = `${mode==="白天自然光"?"Daylight":"Night lighting"}, full front view of the store, ${promptEn[i].replace(/store/g, industry+" store")}`;
 resultWrap.innerHTML+=`
 <div class="result-item">
   <div class="item-text">
     <div><b>第${i+1}组</b></div>
-    <div>中文: ${p.zh}</div>
-    <div>英文: ${p.en}</div>
+    <div>中文: ${zh}</div>
+    <div>英文: ${en}</div>
   </div>
-  <button class="copy-btn" onclick="copySingle('中文: ${p.zh}\\n英文: ${p.en}',this)">复制</button>
-</div>
-`;
+  <button class="copy-btn" onclick="copySingle('中文: ${zh}\\n英文: ${en}',this)">复制</button>
+</div>`;
 });
 resultWrap.innerHTML+=`<button class="copy-all-btn" onclick="copyAll()">📋 一键复制全部20组</button>`;
 }
 </script>
-
 </body>
 </html>
