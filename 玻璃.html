@@ -1,136 +1,165 @@
 <!DOCTYPE html>
+<html lang="zh">
+<head>
 <meta charset="utf-8">
 <title>古月ai智能体·玻璃商业门头灵感库（左右中英文对照版）</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:"Microsoft YaHei",sans-serif;}
 body{
+  background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
   min-height:100vh;
   padding:20px 0 60px;
-  background: linear-gradient(135deg, #0A1128 0%, #1E293B 100%);
   color:#fff;
-}
-body::after{
-  content:"";position:fixed;top:0;left:0;width:100%;height:100%;
-  background:radial-gradient(circle at 50% 50%, rgba(14,165,233,0.1) 0%, transparent 70%);
-  pointer-events:none;
 }
 .header{
-  width:100%;
-  background: linear-gradient(90deg, #0284C7, #0EA5E9);
-  color:#fff;
   text-align:center;
   padding:40px 20px;
   margin-bottom:30px;
-  border-radius:0 0 16px 16px;
-  box-shadow:0 4px 16px rgba(2,132,199,0.12);
 }
 .header h1{font-size:28px;margin-bottom:8px;}
-.header p{font-size:15px;opacity:0.9;}
+.header p{font-size:15px;opacity:0.8;}
 .input-wrap{
-  max-width:800px;margin:0 auto 30px;background:#fff;color:#1F2937;
-  padding:30px;border-radius:16px;box-shadow:0 6px 20px rgba(0,0,0,0.05);
+  max-width:800px;
+  margin:0 auto 30px;
+  background:#1E293B;
+  padding:30px;
+  border-radius:16px;
 }
-.label{font-size:16px;font-weight:500;margin-bottom:10px;display:block;}
-.input-box,select{
-  width:100%;padding:15px 20px;font-size:16px;border:1px solid #E5E7EB;
-  border-radius:10px;margin-bottom:20px;outline:none;transition:0.2s;
+.input-box{
+  width:100%;
+  padding:15px 20px;
+  font-size:16px;
+  border-radius:10px;
+  border:none;
+  margin-bottom:20px;
 }
-.input-box:focus,select:focus{border-color:#0284C7;box-shadow:0 0 0 4px rgba(2,132,199,0.1);}
 .gen-btn{
-  width:100%;padding:16px;background:linear-gradient(90deg,#0284C7,#38BDF8);
-  color:#fff;border:none;border-radius:10px;font-size:17px;font-weight:500;cursor:pointer;transition:0.3s;
+  width:100%;
+  padding:16px;
+  background:linear-gradient(90deg,#0284C7,#38BDF8);
+  color:#fff;
+  font-size:17px;
+  font-weight:500;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
 }
-.gen-btn:hover{transform:translateY(-2px);box-shadow:0 8px 16px rgba(2,132,199,0.15);}
-.gen-btn:disabled{background:#7DD3FC;cursor:not-allowed;transform:none;}
-.result-wrap{max-width:800px;margin:0 auto;padding:0 20px;display:flex;flex-direction:column;gap:12px;}
+.result-wrap{
+  max-width:800px;
+  margin:0 auto;
+  padding:0 20px;
+}
 .result-item{
-  background:#fff;padding:16px;border-radius:12px;display:flex;gap:12px;color:#1F2937;
-  box-shadow:0 2px 10px rgba(0,0,0,0.04);
+  background:#1F2937;
+  padding:20px;
+  border-radius:12px;
+  margin-bottom:12px;
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:15px;
 }
-.result-item .col{flex:1;display:flex;flex-direction:column;}
-.item-text{font-size:14px;line-height:1.6;color:#374151;margin-bottom:6px;}
-.copy-btn{padding:6px 10px;background:#0284C7;color:#fff;border:none;border-radius:6px;font-size:13px;cursor:pointer;white-space:nowrap;transition:0.2s;align-self:flex-start;}
+.item-text{
+  flex:1;
+  font-size:14px;
+  line-height:1.6;
+}
+.copy-btn{
+  padding:8px 12px;
+  background:#0284C7;
+  color:#fff;
+  border:none;
+  border-radius:6px;
+  font-size:13px;
+  cursor:pointer;
+  white-space:nowrap;
+}
 .copy-btn:hover{background:#0369A1;}
-.copy-btn.copied{background:#CCCCCC !important;color:#666666 !important;cursor:default !important;}
-.copy-all-btn{display:block;margin:20px auto 0;padding:12px 24px;background:#0284C7;color:#fff;border:none;border-radius:8px;font-size:15px;cursor:pointer;}
+.copy-btn.copied{
+  background:#CCCCCC !important;
+  color:#666 !important;
+  cursor:default !important;
+}
+.copy-all-btn{
+  display:block;
+  margin:20px auto 0;
+  padding:12px 24px;
+  background:#0284C7;
+  color:#fff;
+  border:none;
+  border-radius:8px;
+  font-size:15px;
+  cursor:pointer;
+}
 .copy-all-btn:hover{background:#0369A1;}
 </style>
+</head>
+<body>
 
 <div class="header">
-  <h1>🪟 古月ai智能体·玻璃商业门头灵感库（中英文对照版）</h1>
-  <p>白天/夜景3D正立面｜平视无遮挡｜8K写实｜智能体高级感</p>
+<h1>🪟 古月ai智能体·玻璃商业门头灵感库（左右中英文对照版）</h1>
+<p>店铺正立面完全展示 | 8K写实 | 智能体科技感底图</p>
 </div>
 
 <div class="input-wrap">
-  <div class="label">请输入店铺行业类型（必填）</div>
-  <input type="text" class="input-box" id="industryInput" placeholder="例如：珠宝首饰、眼镜配镜、美妆集合、轻奢服饰、数码体验、甜品饮品">
-  <div class="label">选择场景光照</div>
-  <select id="sceneSelect">
-    <option value="白天自然光">白天自然光</option>
-    <option value="夜景灯光效果">夜景灯光效果</option>
-  </select>
-  <button class="gen-btn" id="genBtn" onclick="generatePrompts()">🚀 生成20组提示词</button>
+<input type="text" id="industryInput" class="input-box" placeholder="请输入店铺行业，例如：珠宝首饰、眼镜、美妆集合">
+<button class="gen-btn" onclick="generatePrompts()">🚀 生成20组提示词</button>
 </div>
 
 <div class="result-wrap" id="resultWrap"></div>
 
 <script>
-let allPrompts=[];
+const prompts = [
+  {zh:"白天自然光，店铺正立面完全展示，无遮挡，玻璃门头通透明亮，珠宝首饰店铺门头，钢化玻璃+金属包边，8K高清商业写实效果图",en:"Daylight, full front view of the store, unobstructed, glass facade bright and transparent, jewelry store storefront, tempered glass with metal trim, 8K high-resolution commercial realistic render"},
+  {zh:"夜景灯光环境，店铺正立面完全展示，无裁切，玻璃橱窗明亮，眼镜配镜店铺门头，现代简洁风格，8K高清写实效果图",en:"Night lighting environment, full front view of the store, no cropping, glass showcase bright, optical store storefront, modern minimalist style, 8K high-resolution realistic render"},
+  {zh:"白天自然光，店铺正立面完全展示，无遮挡，玻璃门头简约设计，美妆集合店铺门头，通透明亮，商业施工参考级效果",en:"Daylight, full front view of the store, unobstructed, simple glass facade design, beauty collection store storefront, bright and transparent, commercial-grade render for construction reference"},
+  {zh:"夜景灯光效果，店铺正立面完全展示，玻璃门头清晰明亮，轻奢服饰店铺外立面，正面视角8K写实效果",en:"Night lighting effect, full front view of the store, glass facade clear and bright, luxury fashion store exterior, frontal 8K realistic render"},
+  {zh:"白天自然光，店铺正立面完全展示，玻璃橱窗设计，甜品饮品店铺门头，明亮通透，现代简约风格，商业施工参考级",en:"Daylight, full front view of the store, glass showcase design, dessert & beverage store storefront, bright and transparent, modern minimalist style, commercial-grade render for construction"},
+  {zh:"夜景灯光，店铺正立面完全展示，玻璃门头通透，数码体验店铺外立面，正面平视视角，8K商业写实效果",en:"Night lighting, full front view of the store, transparent glass facade, digital experience store exterior, frontal view, 8K commercial realistic render"},
+  {zh:"白天光照，店铺正立面完全展示，无遮挡，珠宝首饰店铺门头设计，玻璃+金属字结合，8K高清效果图",en:"Daylight illumination, full front view of the store, unobstructed, jewelry store storefront design, glass with metal letters combination, 8K high-resolution render"},
+  {zh:"夜景环境，店铺正立面完全展示，眼镜配镜店铺玻璃门头，现代简约风格，通透明亮，商业施工参考级",en:"Night environment, full front view of the store, optical store glass facade, modern minimalist style, bright and transparent, commercial-grade render"},
+  {zh:"白天自然光，店铺正立面完全展示，美妆集合店铺门头，玻璃橱窗设计，清晰明亮，8K高清写实效果图",en:"Daylight, full front view of the store, beauty collection store storefront, glass showcase design, clear and bright, 8K high-resolution realistic render"},
+  {zh:"夜景灯光，店铺正立面完全展示，轻奢服饰店铺外立面，玻璃门头通透明亮，正面视角8K写实效果",en:"Night lighting, full front view of the store, luxury fashion store exterior, glass facade bright and transparent, frontal 8K realistic render"},
+  {zh:"白天自然光，店铺正立面完全展示，玻璃橱窗+金属字，甜品饮品店铺门头，明亮清晰，现代简约风格",en:"Daylight, full front view of the store, glass showcase with metal letters, dessert & beverage store storefront, bright and clear, modern minimalist style"},
+  {zh:"夜景灯光环境，店铺正立面完全展示，数码体验店铺外立面，玻璃门头清晰，8K商业写实效果",en:"Night lighting environment, full front view of the store, digital experience store exterior, glass facade clear, 8K commercial realistic render"},
+  {zh:"白天自然光，店铺正立面完全展示，珠宝首饰店铺玻璃门头，简洁明亮，商业施工级参考",en:"Daylight, full front view of the store, jewelry store glass facade, simple and bright, commercial-grade render for reference"},
+  {zh:"夜景灯光，店铺正立面完全展示，眼镜配镜店铺门头设计，玻璃通透，现代风格，8K高清写实效果",en:"Night lighting, full front view of the store, optical store storefront design, transparent glass, modern style, 8K high-resolution realistic render"},
+  {zh:"白天光照，店铺正立面完全展示，美妆集合店铺外立面，玻璃橱窗设计，清晰通透，施工级效果图",en:"Daylight, full front view of the store, beauty collection store exterior, glass showcase design, clear and transparent, construction-grade render"},
+  {zh:"夜景灯光效果，店铺正立面完全展示，轻奢服饰店铺门头，玻璃通透明亮，正面视角8K写实效果",en:"Night lighting effect, full front view of the store, luxury fashion store storefront, glass bright and transparent, frontal 8K realistic render"},
+  {zh:"白天自然光，店铺正立面完全展示，甜品饮品店铺玻璃门头，明亮简洁，现代设计风格，8K商业写实",en:"Daylight, full front view of the store, dessert & beverage store glass facade, bright and simple, modern design style, 8K commercial realistic render"},
+  {zh:"夜景灯光，店铺正立面完全展示，数码体验店铺外立面，玻璃橱窗清晰通透，正面视角8K写实效果",en:"Night lighting, full front view of the store, digital experience store exterior, glass showcase clear and transparent, frontal 8K realistic render"},
+  {zh:"白天光照，店铺正立面完全展示，珠宝首饰店铺门头，玻璃+金属字，明亮通透，施工级参考",en:"Daylight illumination, full front view of the store, jewelry store storefront, glass with metal letters, bright and transparent, construction-grade reference"},
+  {zh:"夜景灯光环境，店铺正立面完全展示，眼镜配镜店铺玻璃门头，清晰明亮，现代风格，商业施工参考",en:"Night lighting environment, full front view of the store, optical store glass facade, clear and bright, modern style, commercial-grade reference"}
+];
 
-function createPrompt(industry,index,scene){
-  const variants=[
-    "主营品类+简约展示标语","特色品类+清晰吸睛标语","招牌品类+通透展示标语",
-    "核心品类+简约明了标语","爆款品类+清晰展示标语","主营项目+通透吸睛标语",
-    "特色项目+简约干净标语","招牌项目+清晰通透标语","核心项目+简约展示标语",
-    "爆款项目+清晰明了标语","主营服务+通透展示标语","特色服务+简约吸睛标语",
-    "招牌服务+清晰干净标语","核心服务+通透明了标语","爆款服务+简约通透标语",
-    "主营产品+清晰展示标语","特色产品+通透吸睛标语","招牌产品+简约干净标语",
-    "核心产品+清晰通透标语","爆款产品+简约明了标语"
-  ];
-  
-  const cnPrompt = `${scene}，店铺正立面完全展示，完整展示，正面平视视角，无透视畸变，无遮挡，玻璃门头，通透明亮、展示性强、现代简洁，${industry}店铺门头，钢化玻璃、磨砂玻璃、玻璃橱窗、金属包边、玻璃灯箱，品牌店名+${variants[index]}，清晰字体，${scene==="白天自然光"?"日间清晰玻璃背光、橱窗补光":"夜景柔和灯光、背光橱窗补光"}，8K高清，商业写实效果图，3D立体感渲染，细节丰富，色彩自然，可施工参考`;
-
-  const enPrompt = `${scene==="白天自然光"?"Daytime natural light":"Night lighting scene"}, full front view of the shop, unobstructed, correct perspective, glass facade, transparent and bright, highly displayable, modern minimalist style, ${industry} store facade, tempered glass, frosted glass, display windows, metal trims, glass lightboxes, brand name + ${variants[index]}, clear fonts, ${scene==="白天自然光"?"daytime glass backlight and display window fill light":"soft night lights, backlit window fill light"}, 8K ultra HD, commercial realistic rendering, 3D sense, rich details, natural colors, construction reference available`;
-
-  return {cn: cnPrompt, en: enPrompt};
+function copySingle(text,btn){
+navigator.clipboard.writeText(text).then(()=>{btn.classList.add("copied");btn.innerText="已复制";});
 }
 
-function copySingle(text,btn){navigator.clipboard.writeText(text).then(()=>{btn.classList.add('copied');btn.textContent="已复制";});}
-
 function copyAll(){
-  const allText = allPrompts.map((p,i)=>`${i+1}. 中文: ${p.cn}\n英文: ${p.en}`).join("\n\n");
-  navigator.clipboard.writeText(allText).then(()=>{alert("✅ 已成功复制全部20组提示词（中英文对照）！");});
+let allText="";
+prompts.forEach((p,i)=>{allText+=`${i+1}. 中文: ${p.zh}\n英文: ${p.en}\n\n`;});
+navigator.clipboard.writeText(allText).then(()=>alert("✅ 已成功复制全部20组提示词！"));
 }
 
 function generatePrompts(){
-  const industry=document.getElementById("industryInput").value.trim();
-  const scene=document.getElementById("sceneSelect").value;
-  const genBtn=document.getElementById("genBtn");
-  const resultWrap=document.getElementById("resultWrap");
-  if(!industry){alert("请输入店铺行业类型");return;}
-  genBtn.disabled=true;genBtn.textContent="正在生成...";resultWrap.innerHTML="";allPrompts=[];
-  setTimeout(()=>{
-    let html="";
-    for(let i=0;i<20;i++){
-      const prompt=createPrompt(industry,i,scene);
-      allPrompts.push(prompt);
-      html+=`
-      <div class="result-item">
-        <div class="col">
-          <div class="item-text"><b>中文:</b> ${prompt.cn}</div>
-          <button class="copy-btn" onclick="copySingle('${prompt.cn.replace(/'/g,"&apos;")}',this)">复制中文</button>
-        </div>
-        <div class="col">
-          <div class="item-text"><b>English:</b> ${prompt.en}</div>
-          <button class="copy-btn" onclick="copySingle('${prompt.en.replace(/'/g,"&apos;")}',this)">Copy English</button>
-        </div>
-      </div>`;
-    }
-    html+=`<button class="copy-all-btn" onclick="copyAll()">📋 一键复制全部20组中英文</button>`;
-    resultWrap.innerHTML=html;
-    genBtn.disabled=false;genBtn.textContent="🚀 生成20组提示词";
-  },500);
+const resultWrap=document.getElementById("resultWrap");
+resultWrap.innerHTML="";
+prompts.forEach((p,i)=>{
+resultWrap.innerHTML+=`
+<div class="result-item">
+  <div class="item-text">
+    <div><b>第${i+1}组</b></div>
+    <div>中文: ${p.zh}</div>
+    <div>英文: ${p.en}</div>
+  </div>
+  <button class="copy-btn" onclick="copySingle('中文: ${p.zh}\\n英文: ${p.en}',this)">复制</button>
+</div>
+`;
+});
+resultWrap.innerHTML+=`<button class="copy-all-btn" onclick="copyAll()">📋 一键复制全部20组</button>`;
 }
 </script>
+
 </body>
 </html>
