@@ -2,7 +2,7 @@
 <html lang="zh">
 <head>
 <meta charset="utf-8">
-<title>古月ai智能体·玻璃商业门头灵感库（左右中英文对照版）</title>
+<title>古月·玻璃商业门头双语提示词生成器（行业自动命名 + LOGO）</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:"Microsoft YaHei",sans-serif;}
 body{
@@ -95,8 +95,8 @@ body{
 <body>
 
 <div class="header">
-<h1>🪟 古月ai智能体·玻璃商业门头灵感库（左右中英文对照版）</h1>
-<p>店铺正立面完全展示 | 8K写实 | 智能体科技感底图 | 白天/夜景模式</p>
+<h1>🪟 古月·玻璃商业门头双语提示词生成器</h1>
+<p>店铺正立面完全展示 | 包含LOGO | 8K写实 | 智能体科技感底图 | 白天/夜景模式</p>
 </div>
 
 <div class="input-wrap">
@@ -111,7 +111,7 @@ body{
 <div class="result-wrap" id="resultWrap"></div>
 
 <script>
-// 根据行业生成20个不同店铺名称
+// 生成20个不同店铺名称
 function generateStoreNames(industry){
   const suffixes = [
     "旗舰店","体验馆","专卖店","精品店","概念店",
@@ -122,7 +122,7 @@ function generateStoreNames(industry){
   return suffixes.map(suffix => `${industry}${suffix}`);
 }
 
-// 生成中文和英文提示词
+// 生成中文和英文提示词，包含LOGO
 function generatePrompts(){
   const industry = document.getElementById("industryInput").value.trim();
   const mode = document.getElementById("modeSelect").value;
@@ -135,9 +135,9 @@ function generatePrompts(){
   const allPrompts = [];
 
   storeNames.forEach((name,i)=>{
-    const zh = `${mode}，店铺正立面完全展示，${name}玻璃门头，通透明亮，现代简洁风格，可施工参考`;
+    const zh = `${mode}，店铺正立面完全展示，包含LOGO，${name}玻璃门头，通透明亮，现代简洁风格，可施工参考`;
     const enMode = mode==="白天自然光"?"Daylight":"Night lighting";
-    const en = `${enMode}, full front view of the store, ${name} glass storefront, bright and transparent, modern minimalist style, construction reference`;
+    const en = `${enMode}, full front view of the store, including LOGO, ${name} glass storefront, bright and transparent, modern minimalist style, construction reference`;
 
     allPrompts.push({zh,en});
 
@@ -156,7 +156,7 @@ function generatePrompts(){
 
   resultWrap.innerHTML += `<button class="copy-all-btn" onclick="copyAll()">📋 一键复制全部20组</button>`;
 
-  window.allPrompts = allPrompts; // 保留全局方便复制
+  window.allPrompts = allPrompts;
 }
 
 // 单条复制
@@ -179,4 +179,3 @@ function copyAll(){
 
 </body>
 </html>
-
