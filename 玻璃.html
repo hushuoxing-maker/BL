@@ -2,8 +2,9 @@
 <html lang="zh">
 <head>
 <meta charset="utf-8">
-<title>古月·玻璃商业门头双语提示词生成器（白天/夜景 + 完全不重复 + LOGO + 下载）</title>
+<title>古月·玻璃商业门头双语提示词生成器（白天/夜景 + 不重复 + LOGO + 下载）</title>
 <style>
+/* 样式保持原来一致，可直接用之前版本 */
 *{box-sizing:border-box;margin:0;padding:0;font-family:"Microsoft YaHei",sans-serif;}
 body{
   background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
@@ -25,7 +26,7 @@ body{
   padding:30px;
   border-radius:16px;
 }
-.input-box, select{
+.input-box{
   width:100%;
   padding:15px 20px;
   font-size:16px;
@@ -106,7 +107,7 @@ body{
 
 <div class="header">
 <h1>🪟 古月·玻璃商业门头双语提示词生成器</h1>
-<p>店铺正立面完全展示 | 包含LOGO | 8K写实 | 智能体科技感底图 | 白天/夜景模式 | 三元组合不重复</p>
+<p>店铺正立面完全展示 | 包含LOGO | 8K写实 | 白天/夜景模式 | 三元组合不重复</p>
 </div>
 
 <div class="input-wrap">
@@ -117,7 +118,6 @@ body{
 <div class="result-wrap" id="resultWrap"></div>
 
 <script>
-// 中英双语配置
 const styleConfigs = [
   {zh: "现代极简", en: "Modern Minimalism"},
   {zh: "高端质感", en: "High-end Texture"},
@@ -143,11 +143,10 @@ const logoConfigs = [
   {zh: "LOGO玻璃贴膜效果", en: "LOGO Glass Film Effect"}
 ];
 
-// 洗牌函数
 function shuffleArray(array){
   const arr = array.slice();
   for(let i=arr.length-1;i>0;i--){
-    const j = Math.floor(Math.random()*(i+1));
+    const j=Math.floor(Math.random()*(i+1));
     [arr[i],arr[j]]=[arr[j],arr[i]];
   }
   return arr;
@@ -160,7 +159,6 @@ function generatePrompts(){
   const resultWrap = document.getElementById("resultWrap");
   resultWrap.innerHTML="";
 
-  // 随机生成三元组合不重复
   const styleIdx = shuffleArray([...Array(styleConfigs.length).keys()]);
   const lightIdx = shuffleArray([...Array(lightingConfigs.length).keys()]);
   const logoIdx = shuffleArray([...Array(logoConfigs.length).keys()]);
@@ -173,10 +171,10 @@ function generatePrompts(){
     const lighting = lightingConfigs[lightIdx[i%lightIdx.length]];
     const logo = logoConfigs[logoIdx[i%logoIdx.length]];
 
-    const dayZh = `白天自然光，店铺正立面完全展示，${cleanIndustry}玻璃门头，${style.zh}，${lighting.zh}，${logo.zh}，通透明亮，现代简洁，8K写实，智能体科技感底图，可施工参考`;
-    const dayEn = `Daylight Natural Light, full front view of store facade, ${cleanIndustry} glass storefront, ${style.en}, ${lighting.en}, ${logo.en}, bright and transparent, modern and concise, 8K realistic, intelligent tech background, construction reference`;
-    const nightZh = `夜景灯光效果，店铺正立面完全展示，${cleanIndustry}玻璃门头，${style.zh}，${lighting.zh}，${logo.zh}，通透明亮，现代简洁，8K写实，智能体科技感底图，可施工参考`;
-    const nightEn = `Night Scene Lighting Effect, full front view of store facade, ${cleanIndustry} glass storefront, ${style.en}, ${lighting.en}, ${logo.en}, bright and transparent, modern and concise, 8K realistic, intelligent tech background, construction reference`;
+    const dayZh = `白天自然光，店铺正立面完全展示，${cleanIndustry}玻璃门头，${style.zh}，${lighting.zh}，${logo.zh}，通透明亮，现代简洁，8K写实，可施工参考`;
+    const dayEn = `Daylight Natural Light, full front view of store facade, ${cleanIndustry} glass storefront, ${style.en}, ${lighting.en}, ${logo.en}, bright and transparent, modern and concise, 8K realistic, construction reference`;
+    const nightZh = `夜景灯光效果，店铺正立面完全展示，${cleanIndustry}玻璃门头，${style.zh}，${lighting.zh}，${logo.zh}，通透明亮，现代简洁，8K写实，可施工参考`;
+    const nightEn = `Night Scene Lighting Effect, full front view of store facade, ${cleanIndustry} glass storefront, ${style.en}, ${lighting.en}, ${logo.en}, bright and transparent, modern and concise, 8K realistic, construction reference`;
 
     allPrompts.push({dayZh, dayEn, nightZh, nightEn});
 
@@ -195,7 +193,6 @@ function generatePrompts(){
     resultWrap.appendChild(item);
   }
 
-  // 复制和下载按钮
   const copyAllBtn = document.createElement('button');
   copyAllBtn.className='copy-all-btn';
   copyAllBtn.innerText='📋 一键复制全部提示词';
@@ -208,7 +205,6 @@ function generatePrompts(){
   downloadBtn.onclick=()=>downloadTXT(allPrompts, cleanIndustry);
   resultWrap.appendChild(downloadBtn);
 
-  // 绑定单条复制事件
   document.querySelectorAll('.copy-btn').forEach(btn=>{
     btn.onclick=function(){
       const text=this.getAttribute('data-text');
@@ -218,7 +214,6 @@ function generatePrompts(){
   window.allPrompts=allPrompts;
 }
 
-// 单条复制
 function copySingle(text, btn){
   navigator.clipboard.writeText(text).then(()=>{
     const old=btn.innerText;
@@ -231,7 +226,6 @@ function copySingle(text, btn){
   }).catch(err=>{alert("复制失败："+err)});
 }
 
-// 一键复制全部
 function copyAll(allPrompts){
   if(!allPrompts || allPrompts.length===0){alert("请先生成提示词"); return;}
   let allText="";
@@ -242,7 +236,6 @@ function copyAll(allPrompts){
   .catch(err=>alert("复制失败："+err));
 }
 
-// 下载TXT
 function downloadTXT(allPrompts, industry){
   if(!allPrompts || allPrompts.length===0){alert("请先生成提示词"); return;}
   let content="";
@@ -257,6 +250,5 @@ function downloadTXT(allPrompts, industry){
   URL.revokeObjectURL(a.href);
 }
 </script>
-
 </body>
 </html>
