@@ -2,113 +2,34 @@
 <html lang="zh">
 <head>
 <meta charset="utf-8">
-<title>古月·玻璃商业门头双语提示词生成器（左右双列）</title>
+<title>古月ai智能体·玻璃商业门头灵感库（左右中英文对照版）</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:"Microsoft YaHei",sans-serif;}
-body{
-  background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
-  min-height:100vh;
-  padding:20px 0 60px;
-  color:#fff;
-}
-.header{
-  text-align:center;
-  padding:40px 20px;
-  margin-bottom:30px;
-}
+body{background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);min-height:100vh;padding:20px 0 60px;color:#fff;}
+.header{text-align:center;padding:40px 20px;margin-bottom:30px;}
 .header h1{font-size:28px;margin-bottom:8px;}
 .header p{font-size:15px;opacity:0.8;}
-.input-wrap{
-  max-width:800px;
-  margin:0 auto 30px;
-  background:#1E293B;
-  padding:30px;
-  border-radius:16px;
-}
-.input-box{
-  width:100%;
-  padding:15px 20px;
-  font-size:16px;
-  border-radius:10px;
-  border:none;
-  margin-bottom:20px;
-}
-.gen-btn{
-  width:100%;
-  padding:16px;
-  background:linear-gradient(90deg,#0284C7,#38BDF8);
-  color:#fff;
-  font-size:17px;
-  font-weight:500;
-  border:none;
-  border-radius:10px;
-  cursor:pointer;
-  transition:all 0.3s;
-}
-.gen-btn:hover{
-  opacity:0.9;
-  transform:translateY(-2px);
-}
-.result-wrap{
-  max-width:1000px;
-  margin:0 auto;
-  padding:0 20px;
-}
-.result-item{
-  display:flex;
-  gap:15px;
-  background:#1F2937;
-  padding:20px;
-  border-radius:12px;
-  margin-bottom:12px;
-  transition:all 0.2s;
-}
-.result-item:hover{
-  transform:translateY(-3px);
-  box-shadow:0 4px 12px rgba(0,0,0,0.2);
-}
-.item-col{
-  flex:1;
-}
+.input-wrap{max-width:800px;margin:0 auto 30px;background:#1E293B;padding:30px;border-radius:16px;}
+.input-box{width:100%;padding:15px 20px;font-size:16px;border-radius:10px;border:none;margin-bottom:20px;}
+.gen-btn{width:100%;padding:16px;background:linear-gradient(90deg,#0284C7,#38BDF8);color:#fff;font-size:17px;font-weight:500;border:none;border-radius:10px;cursor:pointer;transition:all 0.3s;}
+.gen-btn:hover{opacity:0.9;transform:translateY(-2px);}
+.result-wrap{max-width:1000px;margin:0 auto;padding:0 20px;}
+.result-item{display:flex;gap:15px;background:#1F2937;padding:20px;border-radius:12px;margin-bottom:12px;transition:all 0.2s;}
+.result-item:hover{transform:translateY(-3px);box-shadow:0 4px 12px rgba(0,0,0,0.2);}
+.item-col{flex:1;}
 .item-text{font-size:14px;line-height:1.6;word-break:break-word;}
-.copy-btn{
-  margin-top:8px;
-  padding:6px 12px;
-  background:#0284C7;
-  color:#fff;
-  border:none;
-  border-radius:6px;
-  font-size:13px;
-  cursor:pointer;
-  white-space:nowrap;
-  transition:all 0.2s;
-}
+.copy-btn{margin-top:8px;padding:6px 12px;background:#0284C7;color:#fff;border:none;border-radius:6px;font-size:13px;cursor:pointer;white-space:nowrap;transition:all 0.2s;}
 .copy-btn:hover{background:#0369A1;}
-.copy-btn.copied{
-  background:#CCCCCC !important;
-  color:#666 !important;
-  cursor:default !important;
-}
-.copy-all-btn{
-  display:block;
-  margin:20px auto 0;
-  padding:12px 24px;
-  background:#0284C7;
-  color:#fff;
-  border:none;
-  border-radius:8px;
-  font-size:15px;
-  cursor:pointer;
-  transition:all 0.2s;
-}
+.copy-btn.copied{background:#CCCCCC !important;color:#666 !important;cursor:default !important;}
+.copy-all-btn{display:block;margin:20px auto 0;padding:12px 24px;background:#0284C7;color:#fff;border:none;border-radius:8px;font-size:15px;cursor:pointer;transition:all 0.2s;}
 .copy-all-btn:hover{background:#0369A1;}
 </style>
 </head>
 <body>
 
 <div class="header">
-<h1>🪟 古月·玻璃商业门头双语提示词生成器</h1>
-<p>店铺正立面完全展示 | 包含LOGO | 8K写实 | 白天/夜景模式 | 左右双列</p>
+<h1>🪟 古月ai智能体·玻璃商业门头灵感库（左右中英文对照版）</h1>
+<p>店铺正立面完全展示 | 包含LOGO | 8K写实 | 白天/夜景模式 | 左右双列 | 每组不重复</p>
 </div>
 
 <div class="input-wrap">
@@ -144,8 +65,21 @@ const logoConfigs = [
   {zh: "LOGO玻璃贴膜效果", en: "LOGO Glass Film Effect"}
 ];
 
+// 生成所有可能组合
+function generateAllCombinations(){
+  const combos=[];
+  for(let s of styleConfigs){
+    for(let l of lightingConfigs){
+      for(let logo of logoConfigs){
+        combos.push({style:s, lighting:l, logo:logo});
+      }
+    }
+  }
+  return combos;
+}
+
 function shuffleArray(array){
-  const arr = array.slice();
+  const arr=array.slice();
   for(let i=arr.length-1;i>0;i--){
     const j=Math.floor(Math.random()*(i+1));
     [arr[i],arr[j]]=[arr[j],arr[i]];
@@ -160,22 +94,17 @@ function generatePrompts(){
   const resultWrap = document.getElementById("resultWrap");
   resultWrap.innerHTML="";
 
-  const styleIdx = shuffleArray([...Array(styleConfigs.length).keys()]);
-  const lightIdx = shuffleArray([...Array(lightingConfigs.length).keys()]);
-  const logoIdx = shuffleArray([...Array(logoConfigs.length).keys()]);
-
-  const total = 20;
-  let allPrompts = [];
+  let combos = shuffleArray(generateAllCombinations());
+  const total = Math.min(20, combos.length);
+  const allPrompts=[];
 
   for(let i=0;i<total;i++){
-    const style = styleConfigs[styleIdx[i%styleIdx.length]];
-    const lighting = lightingConfigs[lightIdx[i%lightIdx.length]];
-    const logo = logoConfigs[logoIdx[i%logoIdx.length]];
+    const c=combos[i];
 
-    const dayZh = `白天自然光，店铺正立面完全展示，${cleanIndustry}玻璃门头，${style.zh}，${lighting.zh}，${logo.zh}，通透明亮，现代简洁，8K写实，可施工参考`;
-    const dayEn = `Daylight Natural Light, full front view of store facade, ${cleanIndustry} glass storefront, ${style.en}, ${lighting.en}, ${logo.en}, bright and transparent, modern and concise, 8K realistic, construction reference`;
-    const nightZh = `夜景灯光效果，店铺正立面完全展示，${cleanIndustry}玻璃门头，${style.zh}，${lighting.zh}，${logo.zh}，通透明亮，现代简洁，8K写实，可施工参考`;
-    const nightEn = `Night Scene Lighting Effect, full front view of store facade, ${cleanIndustry} glass storefront, ${style.en}, ${lighting.en}, ${logo.en}, bright and transparent, modern and concise, 8K realistic, construction reference`;
+    const dayZh = `白天自然光，店铺正立面完全展示，${cleanIndustry}玻璃门头，${c.style.zh}，${c.lighting.zh}，${c.logo.zh}，通透明亮，现代简洁，8K写实，可施工参考`;
+    const dayEn = `Daylight Natural Light, full front view of store facade, ${cleanIndustry} glass storefront, ${c.style.en}, ${c.lighting.en}, ${c.logo.en}, bright and transparent, modern and concise, 8K realistic, construction reference`;
+    const nightZh = `夜景灯光效果，店铺正立面完全展示，${cleanIndustry}玻璃门头，${c.style.zh}，${c.lighting.zh}，${c.logo.zh}，通透明亮，现代简洁，8K写实，可施工参考`;
+    const nightEn = `Night Scene Lighting Effect, full front view of store facade, ${cleanIndustry} glass storefront, ${c.style.en}, ${c.lighting.en}, ${c.logo.en}, bright and transparent, modern and concise, 8K realistic, construction reference`;
 
     allPrompts.push({dayZh, dayEn, nightZh, nightEn});
 
@@ -183,20 +112,16 @@ function generatePrompts(){
     item.className='result-item';
     item.innerHTML=`
       <div class="item-col">
-        <b>第${i+1}组 白天</b><br>${dayZh}
-        <br><button class="copy-btn" data-text="${dayZh}">复制中文</button>
-        <br>${dayEn}<br><button class="copy-btn" data-text="${dayEn}">Copy English</button>
+        <b>第${i+1}组 白天</b><br>${dayZh}<br><button class="copy-btn" data-text="${dayZh}">复制中文</button><br>${dayEn}<br><button class="copy-btn" data-text="${dayEn}">Copy English</button>
       </div>
       <div class="item-col">
-        <b>第${i+1}组 夜景</b><br>${nightZh}
-        <br><button class="copy-btn" data-text="${nightZh}">复制中文</button>
-        <br>${nightEn}<br><button class="copy-btn" data-text="${nightEn}">Copy English</button>
+        <b>第${i+1}组 夜景</b><br>${nightZh}<br><button class="copy-btn" data-text="${nightZh}">复制中文</button><br>${nightEn}<br><button class="copy-btn" data-text="${nightEn}">Copy English</button>
       </div>
     `;
     resultWrap.appendChild(item);
   }
 
-  const copyAllBtn = document.createElement('button');
+  const copyAllBtn=document.createElement('button');
   copyAllBtn.className='copy-all-btn';
   copyAllBtn.innerText='📋 一键复制全部提示词';
   copyAllBtn.onclick=()=>copyAll(allPrompts);
@@ -205,26 +130,23 @@ function generatePrompts(){
   document.querySelectorAll('.copy-btn').forEach(btn=>{
     btn.onclick=function(){
       const text=this.getAttribute('data-text');
-      copySingle(text, this);
+      copySingle(text,this);
     };
   });
   window.allPrompts=allPrompts;
 }
 
-function copySingle(text, btn){
+function copySingle(text,btn){
   navigator.clipboard.writeText(text).then(()=>{
     const old=btn.innerText;
     btn.classList.add('copied');
     btn.innerText=old.includes("中文")?"已复制":"Copied";
-    setTimeout(()=>{
-      btn.classList.remove('copied');
-      btn.innerText=old;
-    },2000);
+    setTimeout(()=>{btn.classList.remove('copied');btn.innerText=old;},2000);
   }).catch(err=>{alert("复制失败："+err)});
 }
 
 function copyAll(allPrompts){
-  if(!allPrompts || allPrompts.length===0){alert("请先生成提示词"); return;}
+  if(!allPrompts || allPrompts.length===0){alert("请先生成提示词");return;}
   let allText="";
   allPrompts.forEach((p,i)=>{
     allText+=`第${i+1}组\n白天 中文：${p.dayZh}\n白天 English：${p.dayEn}\n夜景 中文：${p.nightZh}\n夜景 English：${p.nightEn}\n\n`;
