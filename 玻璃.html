@@ -2,9 +2,8 @@
 <html lang="zh">
 <head>
 <meta charset="utf-8">
-<title>古月ai智能体·玻璃商业门头灵感库（左右中英文对照版）</title>
+<title>古月·玻璃商业门头双语提示词生成器（左右双列）</title>
 <style>
-/* 样式保持原来一致，可直接用之前版本 */
 *{box-sizing:border-box;margin:0;padding:0;font-family:"Microsoft YaHei",sans-serif;}
 body{
   background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
@@ -51,25 +50,27 @@ body{
   transform:translateY(-2px);
 }
 .result-wrap{
-  max-width:800px;
+  max-width:1000px;
   margin:0 auto;
   padding:0 20px;
 }
 .result-item{
+  display:flex;
+  gap:15px;
   background:#1F2937;
   padding:20px;
   border-radius:12px;
   margin-bottom:12px;
-  display:flex;
-  flex-direction:column;
-  gap:10px;
   transition:all 0.2s;
 }
 .result-item:hover{
   transform:translateY(-3px);
   box-shadow:0 4px 12px rgba(0,0,0,0.2);
 }
-.item-text{font-size:14px;line-height:1.6;}
+.item-col{
+  flex:1;
+}
+.item-text{font-size:14px;line-height:1.6;word-break:break-word;}
 .copy-btn{
   margin-top:8px;
   padding:6px 12px;
@@ -88,9 +89,9 @@ body{
   color:#666 !important;
   cursor:default !important;
 }
-.copy-all-btn, .download-btn{
+.copy-all-btn{
   display:block;
-  margin:15px auto;
+  margin:20px auto 0;
   padding:12px 24px;
   background:#0284C7;
   color:#fff;
@@ -100,14 +101,14 @@ body{
   cursor:pointer;
   transition:all 0.2s;
 }
-.copy-all-btn:hover, .download-btn:hover{background:#0369A1;}
+.copy-all-btn:hover{background:#0369A1;}
 </style>
 </head>
 <body>
 
 <div class="header">
-<h1>🪟 古月ai智能体·玻璃商业门头灵感库（左右中英文对照版）</h1>
-<p>店铺正立面完全展示 | 包含LOGO | 8K写实 | 白天/夜景模式 | 三元组合不重复</p>
+<h1>🪟 古月·玻璃商业门头双语提示词生成器</h1>
+<p>店铺正立面完全展示 | 包含LOGO | 8K写实 | 白天/夜景模式 | 左右双列</p>
 </div>
 
 <div class="input-wrap">
@@ -181,14 +182,16 @@ function generatePrompts(){
     const item = document.createElement('div');
     item.className='result-item';
     item.innerHTML=`
-      <div class="item-text"><b>第${i+1}组 白天 中文</b><br>${dayZh}</div>
-      <button class="copy-btn" data-text="${dayZh}">复制中文</button>
-      <div class="item-text"><b>第${i+1}组 白天 English</b><br>${dayEn}</div>
-      <button class="copy-btn" data-text="${dayEn}">Copy English</button>
-      <div class="item-text"><b>第${i+1}组 夜景 中文</b><br>${nightZh}</div>
-      <button class="copy-btn" data-text="${nightZh}">复制中文</button>
-      <div class="item-text"><b>第${i+1}组 夜景 English</b><br>${nightEn}</div>
-      <button class="copy-btn" data-text="${nightEn}">Copy English</button>
+      <div class="item-col">
+        <b>第${i+1}组 白天</b><br>${dayZh}
+        <br><button class="copy-btn" data-text="${dayZh}">复制中文</button>
+        <br>${dayEn}<br><button class="copy-btn" data-text="${dayEn}">Copy English</button>
+      </div>
+      <div class="item-col">
+        <b>第${i+1}组 夜景</b><br>${nightZh}
+        <br><button class="copy-btn" data-text="${nightZh}">复制中文</button>
+        <br>${nightEn}<br><button class="copy-btn" data-text="${nightEn}">Copy English</button>
+      </div>
     `;
     resultWrap.appendChild(item);
   }
@@ -198,12 +201,6 @@ function generatePrompts(){
   copyAllBtn.innerText='📋 一键复制全部提示词';
   copyAllBtn.onclick=()=>copyAll(allPrompts);
   resultWrap.appendChild(copyAllBtn);
-
-  const downloadBtn = document.createElement('button');
-  downloadBtn.className='download-btn';
-  downloadBtn.innerText='💾 下载全部提示词TXT';
-  downloadBtn.onclick=()=>downloadTXT(allPrompts, cleanIndustry);
-  resultWrap.appendChild(downloadBtn);
 
   document.querySelectorAll('.copy-btn').forEach(btn=>{
     btn.onclick=function(){
@@ -235,21 +232,6 @@ function copyAll(allPrompts){
   navigator.clipboard.writeText(allText).then(()=>alert("✅ 已复制全部提示词！"))
   .catch(err=>alert("复制失败："+err));
 }
-
-function downloadTXT(allPrompts, industry){
-  if(!allPrompts || allPrompts.length===0){alert("请先生成提示词"); return;}
-  let content="";
-  allPrompts.forEach((p,i)=>{
-    content+=`第${i+1}组\n白天 中文：${p.dayZh}\n白天 English：${p.dayEn}\n夜景 中文：${p.nightZh}\n夜景 English：${p.nightEn}\n\n`;
-  });
-  const blob=new Blob([content],{type:"text/plain;charset=utf-8"});
-  const a=document.createElement('a');
-  a.href=URL.createObjectURL(blob);
-  a.download=`${industry}_门头提示词.txt`;
-  a.click();
-  URL.revokeObjectURL(a.href);
-}
 </script>
 </body>
 </html>
-
