@@ -2,7 +2,7 @@
 <html lang="zh">
 <head>
 <meta charset="utf-8">
-<title>古月ai智能体·玻璃商业门头灵感库（左右中英文对照版）（白天/夜景模式）</title>
+<title>古月·玻璃商业门头双语提示词生成器（左右双列）</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:"Microsoft YaHei",sans-serif;}
 body{
@@ -56,16 +56,19 @@ body{
   margin-bottom:12px;
   display:flex;
   justify-content:space-between;
-  align-items:flex-start;
   gap:15px;
+  align-items:flex-start;
+}
+.item-col{
+  flex:1;
 }
 .item-text{
-  flex:1;
   font-size:14px;
   line-height:1.6;
 }
 .copy-btn{
-  padding:8px 12px;
+  margin-top:8px;
+  padding:6px 12px;
   background:#0284C7;
   color:#fff;
   border:none;
@@ -97,7 +100,7 @@ body{
 <body>
 
 <div class="header">
-<h1>🪟 古月ai智能体·玻璃商业门头灵感库（左右中英文对照版）</h1>
+<h1>🪟 古月·玻璃商业门头双语提示词生成器</h1>
 <p>店铺正立面完全展示 | 8K写实 | 智能体科技感底图 | 白天/夜景模式</p>
 </div>
 
@@ -137,7 +140,6 @@ const promptTemplates = [
   "眼镜配镜店铺门头，玻璃橱窗清晰明亮，现代风格，施工级参考"
 ];
 
-// 生成对应英文
 const promptEn = [
   "Jewelry store storefront, glass showcase bright and transparent, tempered glass with metal letters, modern minimalist style",
   "Optical store storefront design, glass display clear and bright, frontal view",
@@ -161,35 +163,43 @@ const promptEn = [
   "Optical store storefront, glass showcase clear and bright, modern style, construction-grade reference"
 ];
 
+// 单独复制
 function copySingle(text,btn){
-navigator.clipboard.writeText(text).then(()=>{btn.classList.add("copied");btn.innerText="已复制";});
+navigator.clipboard.writeText(text).then(()=>{btn.classList.add("copied"); btn.innerText="已复制";});
 }
 
+// 一键复制全部
 function copyAll(){
 let allText="";
 promptTemplates.forEach((p,i)=>{allText+=`${i+1}. 中文: ${p}\n英文: ${promptEn[i]}\n\n`;});
 navigator.clipboard.writeText(allText).then(()=>alert("✅ 已成功复制全部20组提示词！"));
 }
 
+// 生成提示词
 function generatePrompts(){
 const industry = document.getElementById("industryInput").value.trim();
 const mode = document.getElementById("modeSelect").value;
 if(!industry){alert("请输入店铺行业"); return;}
 const resultWrap=document.getElementById("resultWrap");
 resultWrap.innerHTML="";
+
 promptTemplates.forEach((p,i)=>{
-let zh = `${mode}，店铺正立面完全展示，${p.replace(/店铺/g, industry+'店铺')}`;
-let en = `${mode==="白天自然光"?"Daylight":"Night lighting"}, full front view of the store, ${promptEn[i].replace(/store/g, industry+" store")}`;
+let zh = `${mode}，店铺正立面完全展示，${p.replace(/店铺/g,industry+'店铺')}`;
+let en = `${mode==="白天自然光"?"Daylight":"Night lighting"}, full front view of the store, ${promptEn[i].replace(/store/g,industry+" store")}`;
+
 resultWrap.innerHTML+=`
 <div class="result-item">
-  <div class="item-text">
-    <div><b>第${i+1}组</b></div>
-    <div>中文: ${zh}</div>
-    <div>英文: ${en}</div>
+  <div class="item-col">
+    <div class="item-text"><b>第${i+1}组 中文</b><br>${zh}</div>
+    <button class="copy-btn" onclick="copySingle('${zh.replace(/'/g,"\\'")}',this)">复制中文</button>
   </div>
-  <button class="copy-btn" onclick="copySingle('中文: ${zh}\\n英文: ${en}',this)">复制</button>
+  <div class="item-col">
+    <div class="item-text"><b>第${i+1}组 English</b><br>${en}</div>
+    <button class="copy-btn" onclick="copySingle('${en.replace(/'/g,"\\'")}',this)">Copy English</button>
+  </div>
 </div>`;
 });
+
 resultWrap.innerHTML+=`<button class="copy-all-btn" onclick="copyAll()">📋 一键复制全部20组</button>`;
 }
 </script>
