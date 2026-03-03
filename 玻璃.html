@@ -2,7 +2,7 @@
 <html lang="zh">
 <head>
 <meta charset="utf-8">
-<title>古月·玻璃商业门头双语提示词生成器（行业自动命名 + LOGO）</title>
+<title>古月·玻璃商业门头双语提示词生成器（每组不同 + LOGO）</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:"Microsoft YaHei",sans-serif;}
 body{
@@ -111,18 +111,20 @@ body{
 <div class="result-wrap" id="resultWrap"></div>
 
 <script>
-// 生成20个不同店铺名称
-function generateStoreNames(industry){
-  const suffixes = [
-    "旗舰店","体验馆","专卖店","精品店","概念店",
-    "主题店","展厅","快闪店","品牌店","形象店",
-    "专营店","分店","总店","直销店","形象旗舰",
-    "店铺A","店铺B","店铺C","店铺D","精品体验店"
-  ];
-  return suffixes.map(suffix => `${industry}${suffix}`);
+// 可随机选择的风格、灯光、LOGO表现方式
+const styles = ["现代极简","高端质感","商业旗舰风格","建筑感强化","设计师定制风格","未来科技感","透明通透感","艺术展示风格"];
+const lightings = ["自然光照射","隐藏灯带光效","立体背光LOGO","柔光洗墙灯","霓虹灯条点缀"];
+const logoStyles = ["LOGO浮雕金属质感","LOGO发光效果","LOGO背光设计","LOGO镂空立体感","LOGO玻璃贴膜效果"];
+
+// 生成不重复随机数字
+function uniqueRandoms(count, max){
+  const set = new Set();
+  while(set.size < count){
+    set.add(Math.floor(Math.random()*max));
+  }
+  return Array.from(set);
 }
 
-// 生成中文和英文提示词，包含LOGO
 function generatePrompts(){
   const industry = document.getElementById("industryInput").value.trim();
   const mode = document.getElementById("modeSelect").value;
@@ -131,14 +133,18 @@ function generatePrompts(){
   const resultWrap = document.getElementById("resultWrap");
   resultWrap.innerHTML = "";
   
-  const storeNames = generateStoreNames(industry);
-  const allPrompts = [];
+  let allPrompts = [];
+  
+  const styleIndex = uniqueRandoms(20, styles.length);
+  const lightIndex = uniqueRandoms(20, lightings.length);
+  const logoIndex = uniqueRandoms(20, logoStyles.length);
 
-  storeNames.forEach((name,i)=>{
-    const zh = `${mode}，店铺正立面完全展示，包含LOGO，${name}玻璃门头，通透明亮，现代简洁风格，可施工参考`;
+  for(let i=0;i<20;i++){
+    const storeName = `${industry}店铺${i+1}`;
+    const zh = `${mode}，店铺正立面完全展示，${storeName}玻璃门头，${styles[styleIndex[i]]}，${lightings[lightIndex[i]]}，${logoStyles[logoIndex[i]]}，通透明亮，现代简洁，可施工参考`;
     const enMode = mode==="白天自然光"?"Daylight":"Night lighting";
-    const en = `${enMode}, full front view of the store, including LOGO, ${name} glass storefront, bright and transparent, modern minimalist style, construction reference`;
-
+    const en = `${enMode}, full front view of ${storeName} glass storefront, ${styles[styleIndex[i]]}, ${lightings[lightIndex[i]]}, ${logoStyles[logoIndex[i]]}, bright and transparent, modern minimalist style, construction reference`;
+    
     allPrompts.push({zh,en});
 
     resultWrap.innerHTML += `
@@ -152,10 +158,10 @@ function generatePrompts(){
         <button class="copy-btn" onclick="copySingle('${en.replace(/'/g,"\\'")}',this)">Copy English</button>
       </div>
     </div>`;
-  });
+  }
 
   resultWrap.innerHTML += `<button class="copy-all-btn" onclick="copyAll()">📋 一键复制全部20组</button>`;
-
+  
   window.allPrompts = allPrompts;
 }
 
