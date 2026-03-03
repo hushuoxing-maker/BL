@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
-<title>古月ai智能体·玻璃商业门头灵感库（双语3D升级版）</title>
+<title>古月ai智能体·玻璃商业门头灵感库（左右中英文对照版）</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:"Microsoft YaHei",sans-serif;}
 body{
   min-height:100vh;
   padding:20px 0 60px;
   background: linear-gradient(135deg, #0A1128 0%, #1E293B 100%);
-  background-size:cover;
   color:#fff;
 }
 body::after{
@@ -43,14 +42,14 @@ body::after{
 }
 .gen-btn:hover{transform:translateY(-2px);box-shadow:0 8px 16px rgba(2,132,199,0.15);}
 .gen-btn:disabled{background:#7DD3FC;cursor:not-allowed;transform:none;}
-.result-wrap{max-width:800px;margin:0 auto;padding:0 20px;}
+.result-wrap{max-width:800px;margin:0 auto;padding:0 20px;display:flex;flex-direction:column;gap:12px;}
 .result-item{
-  background:#fff;padding:20px;border-radius:12px;margin-bottom:12px;
-  border-left:4px solid #0284C7;box-shadow:0 2px 10px rgba(0,0,0,0.04);
-  display:flex;flex-direction:column;gap:8px;color:#1F2937;
+  background:#fff;padding:16px;border-radius:12px;display:flex;gap:12px;color:#1F2937;
+  box-shadow:0 2px 10px rgba(0,0,0,0.04);
 }
-.item-text{font-size:14px;line-height:1.6;color:#374151;}
-.copy-btn{padding:8px 12px;background:#0284C7;color:#fff;border:none;border-radius:6px;font-size:13px;cursor:pointer;white-space:nowrap;transition:0.2s;}
+.result-item .col{flex:1;display:flex;flex-direction:column;}
+.item-text{font-size:14px;line-height:1.6;color:#374151;margin-bottom:6px;}
+.copy-btn{padding:6px 10px;background:#0284C7;color:#fff;border:none;border-radius:6px;font-size:13px;cursor:pointer;white-space:nowrap;transition:0.2s;align-self:flex-start;}
 .copy-btn:hover{background:#0369A1;}
 .copy-btn.copied{background:#CCCCCC !important;color:#666666 !important;cursor:default !important;}
 .copy-all-btn{display:block;margin:20px auto 0;padding:12px 24px;background:#0284C7;color:#fff;border:none;border-radius:8px;font-size:15px;cursor:pointer;}
@@ -58,7 +57,7 @@ body::after{
 </style>
 
 <div class="header">
-  <h1>🪟 古月ai智能体·玻璃商业门头灵感库（双语3D升级版）</h1>
+  <h1>🪟 古月ai智能体·玻璃商业门头灵感库（中英文对照版）</h1>
   <p>白天/夜景3D正立面｜平视无遮挡｜8K写实｜智能体高级感</p>
 </div>
 
@@ -96,13 +95,11 @@ function createPrompt(industry,index,scene){
   return {cn: cnPrompt, en: enPrompt};
 }
 
-function copySingle(text,btn){
-  navigator.clipboard.writeText(text).then(()=>{btn.classList.add('copied');btn.textContent="已复制";});
-}
+function copySingle(text,btn){navigator.clipboard.writeText(text).then(()=>{btn.classList.add('copied');btn.textContent="已复制";});}
 
 function copyAll(){
   const allText = allPrompts.map((p,i)=>`${i+1}. 中文: ${p.cn}\n英文: ${p.en}`).join("\n\n");
-  navigator.clipboard.writeText(allText).then(()=>{alert("✅ 已成功复制全部20组提示词（中英文）！");});
+  navigator.clipboard.writeText(allText).then(()=>{alert("✅ 已成功复制全部20组提示词（中英文对照）！");});
 }
 
 function generatePrompts(){
@@ -118,12 +115,16 @@ function generatePrompts(){
       const prompt=createPrompt(industry,i,scene);
       allPrompts.push(prompt);
       html+=`
-        <div class="result-item">
+      <div class="result-item">
+        <div class="col">
           <div class="item-text"><b>中文:</b> ${prompt.cn}</div>
           <button class="copy-btn" onclick="copySingle('${prompt.cn.replace(/'/g,"&apos;")}',this)">复制中文</button>
+        </div>
+        <div class="col">
           <div class="item-text"><b>English:</b> ${prompt.en}</div>
           <button class="copy-btn" onclick="copySingle('${prompt.en.replace(/'/g,"&apos;")}',this)">Copy English</button>
-        </div>`;
+        </div>
+      </div>`;
     }
     html+=`<button class="copy-all-btn" onclick="copyAll()">📋 一键复制全部20组中英文</button>`;
     resultWrap.innerHTML=html;
